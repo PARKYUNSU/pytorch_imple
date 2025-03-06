@@ -75,8 +75,7 @@
 ### Vision Language Model
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
+| **[Grounding DINO](https://github.com/PARKYUNSU/pytorch_imple/blob/main/Multi-modal/Grounding_DINO/README.md)**  | 2024 |
 | **[CLIP (Learning Transferable Visual Models) - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Vision%20Language/CLIP)**  | 2021 |
 
 
-
- 
