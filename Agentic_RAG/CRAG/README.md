@@ -73,6 +73,7 @@ Retrieval Evaluator는 검색된 문서들이 실제로 질문에 대해 올바�
 
 본 논문에서는 T5-Large 기반의 Retrieval Evaluator(약 0.77B 파라미터)를 미세조정하여, 기존 LLM(instruction-tuned LLaMA-2 7B)을 사용하는 critic model보다 낮은 비용으로 검색을 평가할 수 있습니다. 이렇게 계산된 Confidence는 최종적으로 검색 결과가 옳은지 판단하며 이후 Action Trigger(Correct, Incorrect, Ambiguous)를 결정합니다.
 
+#### Retrieval Evaluator Fine-tuning 방법
 ```text
 Self-RAG에서 제공한 PopQA 데이터셋으로 Fine-tuning 합니다.
 
@@ -110,7 +111,7 @@ Fine-tuning된 Retrieval Evaluator를 통해 각 Strip의 관련성을 평가해
 CRAG에서는 내부 정보로만 답변을 잘 생성할 수 없음을 인지하면, 외부 지식을 활용하여 질문의 답변을 보완합니다.
 
 입력 Query 문장을 ChatGPT를 이용하여 키워드 Query로 정제하고, API로 URL 링크를 생성해서 Wikipedia 등 공신력있는 웹페이제에서 정보를 우선적으로 검색합니다.
-
+ 
 
 # 4. Experiment
 본 실험에서는 CRAG의 RAG 기반 접근법이 단문 및 장문 생성 작업에서 얼마나 효과적인지, 그리고 다양한 실제 시나리오(단문 생성, 장문 생성, 참/거짓 질문, 객관식 질문)에서 일반성이 있는지를 평가하였습니다.
@@ -121,12 +122,13 @@ PopQA(단문 생성), Biography(장문 생성), PubHealth(참/거짓 질문), Ar
 Baseline 비교:
 CRAG는 검색을 활용한 표준 RAG 및 고급 RAG(Self-RAG, SAIL 등)와 비교되었고, 공개 LLM(예: LLaMA2-7B, Alpaca-7B, CoVE65B)과 propriety LLM(예: LLaMA2-chat13B, ChatGPT)도 평가에 포함되었습니다.
 
-
-
 ![image](https://github.com/user-attachments/assets/a21a45ea-d87d-4dbf-99bc-a3f212358a01)
 
-
 # 5. Result
-RAG 문제점 ~~~
+정리를 하면 CRAG는 RAG가 잘못된 문서를 기반으로 검색을 하고 답변을 생성하는 문제점을 보완하고, 그 보완하는 방법에 대해서 알아봤습니다. 
 
-CRAG로 RAG 프레임워크를 개선했지만 내부 지식만으로는 한계가 있어 외부 웹검생을 통한 보완이 불가피한 점을 한계점으로 꼽고있습니다.
+경량화된 검색 Retrieval Evaluator를 사용해서 세 가지의 항목으로 동작을 구분해서 문서를 검색하였고. 또한, 웹 검색 및 최적화된 지식 활용을 추가로 도입함으로써, 내부 지식의 문제점을 보완하고 최적화된 지식 활용을 도입해서 사용했습니다.
+
+그러나, 논문의 저자는 RAG 프레임워크를 여러 방법으로 개선했지만 궁극적으로는 내부 지식만으로 정확한 답변을 생서하기에 한계가 있어 외부 웹 검색을 통한 보완이 불가피한 점을 한계점으로 꼽고있습니다.
+
+이러한 외부 Retrieval Evaluator를 제거하고 LLM 이 더 나은 검색 능력을 갖추도록 하는 것이 향후 연구 과제로 남아 풀어야할 숙제라고 얘가합니다.
