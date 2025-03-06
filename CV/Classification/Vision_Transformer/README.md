@@ -58,7 +58,7 @@ ViT는 기존의 Transformer 모델들이 가진 한계를 극복하기 위해, 
 
 # 3. Architecture
 
-<img src="https://github.com/user-attachments/assets/1db9cbe3-324c-4dfd-ade8-4011bee04c7e" width=800>
+<img src="https://github.com/user-attachments/assets/df4da37a-0ca4-4134-a061-d19bb99e6b64" width=800>
 
 ### 3.1. Patch Embedding
 Transformer는 1D 시퀀스를 입력으로 받기 때문에, ViT에서는 이미지를 $$2D$$ 형태에서 $$1D$$ 시퀀스로 변환해야합니다. 이미지는 원래 $$x \in \mathbb{R}^{H \times W \times C}$$ 형태에서, $$P \times P$$ 크기의 작은 패치들로 나눕니다.
@@ -79,7 +79,7 @@ $Where:$
 
 이렇게 나눈 패치는 $$N \times (P^2⋅C)$$ 크기의 $$1D$$ 시퀀스로 변환되어 Transformer의 입력값으로 들어갑니다.
 
-<img src="https://github.com/user-attachments/assets/628c82f5-ca66-42b8-a4b8-e15f9f577947" width=600>
+<img src="https://github.com/user-attachments/assets/5dae13ff-960f-4f49-bba1-38b7628af563" width=600>
 
 따라서 $1D$로 변환되는 시퀀스의 계산은 다음과 같습니다.
 
@@ -101,7 +101,7 @@ $16 \times 16 \times 3 \times 14 \times 14 = 150,528$
 ### 3.2.1. [CLS]token
 ViT 모델은 Image Classification을 위해 [CLS] = Classification 토큰을 추가합니다. 이 토큰은 앞서 만든 Patch Embedding 앞에 위치하며, Transformer에서 출력할때 최종 이미지를 결정하는 정보를 추출합니다.
 
-<img src="https://github.com/user-attachments/assets/2cca2a31-ec89-4e78-ab7a-b4e8cad93604" width=500>
+<img src="https://github.com/user-attachments/assets/23340e01-31cd-47c4-aa28-ee3a40395461" width=500>
 
 
 [CLS]token은 그림에서 파란색 부분으로 그 크기는 $1 \times 768$ 텐서입니다. (ViT의 hidden size)
@@ -111,19 +111,18 @@ ViT 모델은 Image Classification을 위해 [CLS] = Classification 토큰을 �
 ### 3.2.2. Positinoal Embedding
 Transformer 모델은 기본적으로 입력 시퀀스의 순서에 대한 정보를 스스로 처리할 수 없습니다. 그래서 **Positional Embedding**을 사용하여 입력 시퀀스에 각 위치 정보를 부여합니다. 이 정보는 모델이 시퀀스 내의 요소들 간의 상대적인 위치 관계를 학습하는 데 도움을 줍니다.
 
-<img src="https://github.com/user-attachments/assets/270d4bd2-a55c-45fd-88e9-6c4d19339f55" width=700>
+<img src="https://github.com/user-attachments/assets/9fded862-1277-4353-9d81-f8a80f7127d3" width=700>
 
 Positional Embedding은 학습 가능한 $197 \times 768$ 텐서로, **1D** 형태입니다. 여기서 **197**은 이미지 패치 196개와 **[CLS] token**을 포함한 총 시퀀스 길이를 의미하며, **768**은 ViT 모델의 hidden size와 동일합니다.
  
 ViT에서는 **2D Positional Embedding** 대신 **1D Positional Embedding**을 사용하지만, 성능 차이가 크게 나지 않았습니다. 이는 이미지를 패치로 나누는 과정에서 공간적 정보가 상대적으로 덜 중요해지기 때문입니다. 
 
-<img src="https://github.com/user-attachments/assets/e20cc90f-1ca8-40ae-a895-2ee564017e97" width=1100>
+<img src="https://github.com/user-attachments/assets/d1142c95-ec5d-4c7c-af6a-ca292f4bb236" width=1100>
 
 **Positional Embedding**은 **[CLS] token**과 결합되어 최종적으로 입력 시퀀스를 형성하고, 이를 Transformer에 입력하여 이미지를 처리합니다. 이를 통해 모델은 각 패치의 상대적인 위치를 학습할 수 있게 되어 Img Classification 작업에 도움을 줍니다.
 
-
 ### 3.2.3. Process
-<img src="https://github.com/user-attachments/assets/3879a73e-a89d-49c3-b569-353e19e071ff" width=1100>
+<img src="https://github.com/user-attachments/assets/29183398-594c-4e8c-a1ba-8b91d83efb0d" width=1100>
 
 
 ### 3.3. Transformer Encoder
@@ -196,8 +195,8 @@ LayerNorm은 활성화 배치의 각 항목의 평균과 분산을 계산하여 
 | **배치 크기 의존성** | 크면 안정적, 작으면 성능 저하      | 독립적, 소규모 배치에서도 안정 |
 | **순차 데이터 처리**  | 비효율적                         | 적합                          |
 | **추론 단계**       | 평균/분산 저장 필요              | 추가 저장 필요 없음            |
-    
-<img src="https://github.com/user-attachments/assets/40930afb-50c9-4a99-9fd2-5b630d39b8e3" width=600>
+
+<img src="https://github.com/user-attachments/assets/19a7571b-db26-4c04-a0c3-16fbda4463e7" width=600>
     
 층 정규화 수식은 다음과 같습니다.
 벡터 $h$의 평균 $\mu$와 분산 $\sigma^2$을 계산한 후, 각 차원 $h_k$의 값을 아래 수식으로 정규화합니다.
@@ -213,7 +212,9 @@ $$y_k = \gamma \hat{h}_k + \beta$$
 $\gamma$와 $\beta$는 초기값으로 각각 1과 0을 설정하며 학습을 통해 최적화합니다.
 </details>
 
-<img src="https://github.com/user-attachments/assets/c5c532c5-d5a8-4606-8af9-1fe51bb5080b" width=300>
+<br/>
+<br/>
+<img src="https://github.com/user-attachments/assets/47b57887-78ca-42c2-9986-a9e4b8622373" width=300>
 
 ### 3.3.1 수식
 
@@ -258,13 +259,13 @@ Transformer 최종 출력
 $$y=LN(z_{0}^L)$$
 
 ### 3.3.2 Process
-<img src="https://github.com/user-attachments/assets/3a860057-2fef-425e-8959-56ccc23a1bfc" width=700>
+<img src="https://github.com/user-attachments/assets/2a05282a-d251-4479-8e5f-af334fafa453" width=700>
 
 ### 3.4 MLP Head (Classification Head)
 
 ViT의 마지막 단계로 Classification Head 입니다. 이 단계는 [CLS]token을 기반으로 최종 이미지를 분류하는 역할을 합니다. Classification Head는 Linear 계층으로 구성되어 있으며, 이 계층은 Transformer 출력에서 [CLS]token에 해당하는 값을 사용하여 최종 Class 확률을 예측합니다.
 
-<img src="https://github.com/user-attachments/assets/3f6181ff-bc6d-450a-8414-14abc48ede1b" width=900>
+<img src="https://github.com/user-attachments/assets/be8ddaae-c691-4121-aa12-b458dbc12fa3" width=900>
 
 # 4. Hybrid Architecture
 
@@ -291,7 +292,7 @@ Positional Embedding & [CLS]token
   
 - 효율성: CNN을 통해 패치 임베딩을 수행하면, 이미지의 공간적 정보를 더 효율적으로 활용할 수 있습니다.
 
-<img src="https://github.com/user-attachments/assets/35aa46c6-cbf2-4a9e-bf5f-c53c904bddbe" width=300>
+<img src="https://github.com/user-attachments/assets/712532ae-2894-4528-9f7e-ad8c2bf1d4b2" width=300>
 
 # 5. Inductive bias
 
@@ -445,16 +446,12 @@ ViT는 ImageNet-21k와 같은 대규모 데이터셋에서 사전 훈련을 수�
 
 # Result
 ### 1st Experiment  
-![image](https://github.com/user-attachments/assets/db4aa33e-cb3b-4482-a559-b03c6ed35464)
+![image](https://github.com/user-attachments/assets/94fcd5a4-7c59-45ab-8380-093e4ec40a20)
+
 
 ### 2nd Experiment
-![image](https://github.com/user-attachments/assets/381a6033-2ae7-4c2a-87ab-e9ba0f296513)
+![image](https://github.com/user-attachments/assets/885bb52f-a358-4f45-944f-90a90e785233)
+
 
 ### 3rd Experiment
-![image](https://github.com/user-attachments/assets/555e7eb1-17c1-49c8-b75b-e4ff65fddfcd)
-
-
-
-
-
-
+![image](https://github.com/user-attachments/assets/d44d2b19-7691-4b38-9334-6500bb7bc839)
