@@ -1,9 +1,10 @@
 # VIP 영상
 ## SSD MobileNetV2 Model -> Iphone 14Pro
 
-![ssdv2](https://github.com/user-attachments/assets/bf29e733-54ec-4933-adf4-257618d5a179)
+MVP LIVE
 
-Link : https://drive.google.com/file/d/1j2TDMbTNzmsutQ0idPDGSN9ld1R0v_sN/view?usp=sharing
+https://github.com/user-attachments/assets/0193f3f0-6dc0-4133-ab3c-81341b4dfa2f
+
 
 ---
 ## 논문 리뷰 영상
