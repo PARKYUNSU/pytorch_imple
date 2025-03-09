@@ -124,10 +124,12 @@ CRAG에서는 내부 정보로만 답변을 잘 생성할 수 없음을 인지�
 # 4. Experiment
 본 실험에서는 CRAG의 RAG 기반 접근법이 단문 및 장문 생성 작업에서 얼마나 효과적인지, 그리고 다양한 실제 시나리오(단문 생성, 장문 생성, 참/거짓 질문, 객관식 질문)에서 일반성이 있는지를 평가하였습니다.
 
-태스크 및 평가 데이터셋:
+#### 태스크 및 평가 데이터셋
+
 PopQA(단문 생성), Biography(장문 생성), PubHealth(참/거짓 질문), Arc-Challenge(객관식 질문)를 대상으로 평가를 진행하였으며, PopQA, PubHealth, Arc-Challenge는 정확도, Biography는 FactScore를 평가 지표로 사용하였습니다.
 
-Baseline 비교:
+#### Baseline 비교
+
 CRAG는 검색을 활용한 표준 RAG 및 고급 RAG(Self-RAG, SAIL 등)와 비교되었고, 공개 LLM(예: LLaMA2-7B, Alpaca-7B, CoVE65B)과 propriety LLM(예: LLaMA2-chat13B, ChatGPT)도 평가에 포함되었습니다.
 
 ![image](https://github.com/user-attachments/assets/a21a45ea-d87d-4dbf-99bc-a3f212358a01)
