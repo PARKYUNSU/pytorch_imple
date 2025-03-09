@@ -7,6 +7,14 @@
 [Read the Paper](https://arxiv.org/pdf/2401.15884)
 
 ---
+## 논문 리뷰 영상
+
+<a href="https://www.youtube.com/watch?v=IaPEM5RMox0" target="_blank">
+  <img src="https://github.com/user-attachments/assets/8055bb60-fa8e-4e3b-82d4-c25d31d1c8e7" width="600" alt="YouTube Video">
+</a>
+
+---
+
 # 1. Introduction
 
 LLM의 대표적인 문제인 Hallucination(환각) 현상은 선행된 연구인 [RAG](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/Basic_Agentic_RAG)에 의해 다소 보완되었으나, RAG의 주요 문제는 검색(Retrieval) 단계에 있습니다. 이는 검색된 문서의 연관성에 크게 의존하게되어, 질문(Query)에 도움이 되지 않는 부정확하거나 불필요한 정보가 포함될 수 있기 때문입니다.
