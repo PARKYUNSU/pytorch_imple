@@ -47,6 +47,7 @@
 # Natural Language Processing
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
+| **[DeepSeek-R1](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/DeepSeek-R1)**  | 2025 |
 | **[FLAN (Finetuned Language Models)](https://github.com/PARKYUNSU/pytorch_imple/blob/main/NLP/FLAN)**   | 2022 |
 | **[Transformer (Attention Is All You Need)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/Transformer)**  | 2017 |
 | **[seq2seq (Sequence to Sequence Learning)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/seq2seq)**  | 2014 |
