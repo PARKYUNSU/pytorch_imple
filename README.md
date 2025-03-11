@@ -81,4 +81,4 @@
 # Reinforcement Learning
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
-| **[PPO (Proximal Policy Optimization Algorithms)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Multi-modal/CLIP)**  | 2017 |
+| **[PPO (Proximal Policy Optimization Algorithms)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/RL/ppo)**  | 2017 |
