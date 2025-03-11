@@ -62,8 +62,6 @@
 | **[RAG (Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/Basic_Agentic_RAG)**  | 2021 |
 
 
-
-
 # Audio
 
 | 논문 제목                                    | 연도 |
@@ -80,3 +78,7 @@
 | **[CLIP (Learning Transferable Visual Models)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Multi-modal/CLIP)**  | 2021 |
 
 
+# Reinforcement Learning
+| 논문 제목                                    | 연도 |
+|---------------------------------------------|-----|
+| **[PPO (Proximal Policy Optimization Algorithms)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Multi-modal/CLIP)**  | 2017 |
