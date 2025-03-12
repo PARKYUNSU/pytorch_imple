@@ -27,7 +27,7 @@ DeepSeek을 예기하기전 먼저 기존 LLM을 먼저 살펴볼 필요가 있�
 
 OpenAI-o1 시리즈는 사후훈련 중 하나인 Chain-of-Thought(COT)를 도입했는데, 이는 답변 생선 전에 여러 단계를 거치면서 모델이 스스로 생각하는 과정입니다. OpenAI-o1은 이러한 COT를 답변의 길이를 늘려 논리젓 사고 능력을 크게 향상시켰습니다. 그러나, COT의 단점으로 실제 배포하고 테스트하는 시점에서 모델 성능을 더 강화시키는 방법은 아직까지 명확하지 않습니다.
 
-이러한 단점을 해결하기 위해서 기존 연구에서는 3가지 고안 방법을 진행했습니다.
+이러한 단점을 해결하기 위해서 기존 연구에서는 3가지 방법을 진행했습니다.
 
 #### 1) Process-based Reward
 #### 2) Reinforcement Learning
@@ -48,6 +48,11 @@ Majority Voting
 
  LLM이 수학문제를 여러번 풀어 문제에 대해 생성된 솔루션들 중에서 가장 빈도가 높은 답변을 최종 선택하는 방식
 ```
+<img src="https://github.com/user-attachments/assets/6c1c4190-a956-489b-bccb-808097554a47" width=500>
+
+| DeepSeek-R1-Zero and OpenAI o1 Models on reasoning-related benchmarks
+
+
 <img src="https://github.com/user-attachments/assets/f98f3608-cf9e-4d7a-bb98-964c90d2648f" width=500>
 
 | AIME Dataset Example
@@ -55,8 +60,10 @@ Majority Voting
 그러나 DeepSeek-R1-Zero는 Poor Readability와 Language Mixing의 문제가 있어서, 그 문제를 보완하기위해 Cold-Start Data를 도입한 DeepSeek-R1을 만들었습니다.
 
 ### DeepSeek-R1 Training Process
+<img src="https://github.com/user-attachments/assets/55d31996-b330-4a1e-adbf-64a3439cf5de" width=600>
 
-<img src="https://github.com/user-attachments/assets/55d8d2f9-1cc5-4eba-9100-16d2683eac04" width=500>
+
+<img src="https://github.com/user-attachments/assets/55d8d2f9-1cc5-4eba-9100-16d2683eac04" width=600>
 
 # 3. Approach
 <details>
@@ -105,8 +112,6 @@ $$\max_{\theta} \left[\frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(
 
 Policy 업데이트 시 KL 발산을 이용해 신뢰 영역을 설정하여 Nwe Policy이 Old Policy와 크게 차이나지 않도록 보장하는 TRPO의 신뢰 영역 보장을 근사적으로 구현하면서 클리핑(clipping) 기법을 도입해 Policy 업데이트의 안정성을 확보합니다.
 
-
-
 ### TRPO(Trust Region Policy Optimization) Process
 
 $$\textbf{TRPO:} \quad \max_{\theta} \ \mathbb{E}t \Bigg[
@@ -118,7 +123,6 @@ $$\textbf{TRPO:} \quad \max_{\theta} \ \mathbb{E}t \Bigg[
 TRPO는 objective term $\frac{\pi_{\theta}(a_t \mid s_t)}{\pi_{\text{old}}(a_t \mid s_t)} \\hat{A}t$ 을 최대화하면서 penalty term $\mathrm{KL}[\pi_{\text{old}}]$를 최소화하는 것을 목표로 합니다.
 
 즉, Policy의 improvement step을 최대한 크게 가져가면서, 동시에 penalty term은 old policy와 new policy의 차이가 너무 크게 변경되지 않도록 KL divergence를 통해 억제하는 것 입니다.
-
 
 ### PPO(Proximal Policy Optimization) Process
 
@@ -202,6 +206,28 @@ PPO와 달리 별도의 가치망(critic)을 두지 않고, 한 프롬프트에 
 
 ### 3. Training Template
 
+DeepSeek-R1-Zero를 학습시키기 위해, 우리는 기본 모델이 지정된 지침을 따르도록 유도하는 간단한 템플릿을 먼저 설계했습니다.
+
+![image](https://github.com/user-attachments/assets/7a3d2a88-e013-409c-93e7-ca47cc4e5b4f)
+
+
+이 템플릿은 DeepSeek-R1-Zero가 먼저 추론 과정을 생성한 후 최종 답변을 제공하도록 요구합니다. 연구자들은 이 구조적 형식에 제약을 한정함으로써, 특정 문제 해결 전략을 촉진하는 등의 내용에 대한 편향은 피하고, RL 과정 동안 모델이 자연스럽게 발전하는 모습을 정확히 관찰할 수 있도록 의도적으로 제한하였습니다.
+
 ### 4. Performance, Self-evolution Process and Aha Moment of DeepSeek-R1-Zero
+<img src="https://github.com/user-attachments/assets/c1daa3e6-9eb5-4866-9a40-57175d28a501" width=600>
 
+| 학습이 진행됨에 따라 DeepSeek-R1-Zero의 AIME 정확도의 변화를 나타낸 그래프
 
+<img src="https://github.com/user-attachments/assets/9caa25e9-c1ae-4e63-bbf5-a1a4e68343c8" width=600>
+
+| 학습이 진행됨에 따라 DeepSeek-R1-Zero의 응답 길이의 변화를 나타낸 그래프
+
+위의 그림은 DeepSeek-R1-Zero의 Self-evolution 과정을 표현한 그래프입니다. 기본 모델에서 직접 RL을 함으로써, 모델이 시간이 지남에 따라 스스로의 사고 과정을 탐색하고 정교하게 다듬으면서 점 차 복잡한 추론 능력을 얻어갑니다.
+
+이는, 모델이 이전 단계를 다시 검토하고 평가하는 Reflection 과정을 통해서 추론 능력을 항상시킵니다.
+
+<img src="https://github.com/user-attachments/assets/5611b385-24f7-4cfb-a5bf-dc96f409268b" width=600>
+
+위의 그림은 DeepSeek-R1-Zero의 훈련과정에서 나오는 특이 현상 중 하나인 "(아하 모먼트)aha moment" 입니다. 이 단계에서 DeepSeek-R1-Zero는 초기 생각을 다시 재평가해서 문제 해결에 더 많은 생각을 하는 법을 학습합니다.
+
+연구진들은 모델에 문제 해결 방법을 가르치는 대신, 올바른 Reward을 제공하면서 자율적으로 고급 추론 능력을 RL을 통해서 개발할 수 있다는 것을 알수 있었습니다.
