@@ -158,6 +158,20 @@ end for
 ### GRPO(Group Relative Policy Optimization) Process
 <img src="https://latex.codecogs.com/png.image?\inline&space;\dpi{110}\bg{white}$$J_{GRPO}(\theta)=\mathbb{E}_{q\sim&space;P(Q)\{o_i\}_{i=1}^G\sim\pi_{\theta_{\text{old}}}(O|q)}\left[\frac{1}{G}\sum_{i=1}^G\left(\min\left(\frac{\pi_{\theta}(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)}A_i,\text{clip}\left(\frac{\pi_{\theta}(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)},1-\epsilon,1&plus;\epsilon\right)A_i\right)-\beta&space;D_{KL}(\pi_{\theta}\|\pi_{\text{ref}})\right)\right]$$" title="$$J_{GRPO}(\theta)=\mathbb{E}_{q\sim P(Q)\{o_i\}_{i=1}^G\sim\pi_{\theta_{\text{old}}}(O|q)}\left[\frac{1}{G}\sum_{i=1}^G\left(\min\left(\frac{\pi_{\theta}(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)}A_i,\text{clip}\left(\frac{\pi_{\theta}(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)},1-\epsilon,1+\epsilon\right)A_i\right)-\beta D_{KL}(\pi_{\theta}\|\pi_{\text{ref}})\right)\right]$$" />
 
+- 모델이 Dataset $P(Q)$에서 질문 $q$를 가져옵니다.
+- 이전 Policy $\pi{\theta}_{old}$에서 출력 그룹 ${o_1, o_2, ..., o_G}$을 샘플링합니다.
+- 즉, 이전 Policy를 기반으로 응답을 가져옴으로, 새로운 Policy $\pi_{\theta}$를 업데이트 하는 것
+
+- 새로운 Policy가 이전 Policu와 얼마나 다른지 측정합니다.
+- $r_t(θ)$의 비율이 1보다 크면, 새로운 Policy가 해당 출력에 더 높은 확률을 달성
+- $r_t(θ)$의 비율이 1보다 작으면, 새로운 Policy가 해당 출력에 더 낮은 확률을 달성
+
+- $r_t(θ)$의 비율을 $\epsilon$ 으로 제한하여, 모델이 보상에 대해 과도하게 최적화 되지 않도록 설정
+
+- KL Divergence로 새로운 Policy와 이전 Policy의 차이를 측정하는 함수로, 이를 통해 학습이 너무 급격하게 변하지 않도록 조정
+- $\beta$는 하이퍼파라미터로 모델이 기준 Policy와 얼마나 가까이 유지되는지 조절
+
+
 DeepSeek에서는 GRPO를 사용했으며, GRPO는 2023년경 제안된 새로운 강화학습 알고리즘으로, 특히 대형 언어 모델(LLM)의 추론, 수학 문제 해결 등 고급 능력을 강화시키기 위해 설계되었습니다.
 
 PPO와 달리 별도의 가치망(critic)을 두지 않고, 한 프롬프트에 대해 Old Policy $π$를 이용해 여러 응답(출력)을 생성합니다.
