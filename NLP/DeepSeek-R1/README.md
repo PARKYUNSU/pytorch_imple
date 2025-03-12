@@ -103,7 +103,7 @@ $$\max_{\theta} \left[\frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(
 
 강화학습에서는 Policy 업데이트를 위해 보통 Actor-Critic 방식, 즉 Policy 모델과 Critic 모델을 함께 사용합니다. 대표적인 알고리즘인 PPO(Proximal Policy Optimization)는 2017년에 제안되었습니다.
 
-Policy 업데이트 시 KL 발산을 이용해 신뢰 영역을 설정하여 새로운 Policy이 기존 Policy와 크게 차이나지 않도록 보장하는 TRPO의 신뢰 영역 보장을 근사적으로 구현하면서 클리핑(clipping) 기법을 도입해 Policy 업데이트의 안정성을 확보합니다.
+Policy 업데이트 시 KL 발산을 이용해 신뢰 영역을 설정하여 Nwe Policy이 Old Policy와 크게 차이나지 않도록 보장하는 TRPO의 신뢰 영역 보장을 근사적으로 구현하면서 클리핑(clipping) 기법을 도입해 Policy 업데이트의 안정성을 확보합니다.
 
 
 
