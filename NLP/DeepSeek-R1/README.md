@@ -106,13 +106,13 @@ $$\max_{\theta} \left[\frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(
 
 </details>
 
-### 3.1. Reinforcement Learning on the Base Model : PRO와 GRPO 비교
+## 3.1. Reinforcement Learning on the Base Model : PRO와 GRPO 비교
 
 강화학습에서는 Policy 업데이트를 위해 보통 Actor-Critic 방식, 즉 Policy 모델과 Critic 모델을 함께 사용합니다. 대표적인 알고리즘인 PPO(Proximal Policy Optimization)는 2017년에 제안되었습니다.
 
 Policy 업데이트 시 KL 발산을 이용해 신뢰 영역을 설정하여 Nwe Policy이 Old Policy와 크게 차이나지 않도록 보장하는 TRPO의 신뢰 영역 보장을 근사적으로 구현하면서 클리핑(clipping) 기법을 도입해 Policy 업데이트의 안정성을 확보합니다.
 
-### TRPO(Trust Region Policy Optimization) Process
+### 3.1.1. TRPO(Trust Region Policy Optimization) Process
 
 $$\textbf{TRPO:} \quad \max_{\theta} \ \mathbb{E}t \Bigg[
 \frac{\pi_{\theta}(a_t \mid s_t)}{\pi_{\text{old}}(a_t \mid s_t)} \\hat{A}t
@@ -124,7 +124,7 @@ TRPO는 objective term $\frac{\pi_{\theta}(a_t \mid s_t)}{\pi_{\text{old}}(a_t \
 
 즉, Policy의 improvement step을 최대한 크게 가져가면서, 동시에 penalty term은 old policy와 new policy의 차이가 너무 크게 변경되지 않도록 KL divergence를 통해 억제하는 것 입니다.
 
-### PPO(Proximal Policy Optimization) Process
+### 3.1.2. PPO(Proximal Policy Optimization) Process
 
 $$\textbf{PPO:} \quad \max_{\theta} \ \mathbb{E}t \Bigg[
 \min\Bigg(
@@ -159,7 +159,7 @@ end for
   
 - 단점: on-policy 방식으로 매 업데이트마다 새로운 데이터를 생성해야 하므로 샘플 효율이 낮을 수 있습니다.
 
-### GRPO(Group Relative Policy Optimization) Process
+### 3.1.3. GRPO(Group Relative Policy Optimization) Process
 <img src="https://latex.codecogs.com/png.image?\inline&space;\dpi{110}\bg{white}$$J_{GRPO}(\theta)=\mathbb{E}_{q\sim&space;P(Q)\{o_i\}_{i=1}^G\sim\pi_{\theta_{\text{old}}}(O|q)}\left[\frac{1}{G}\sum_{i=1}^G\left(\min\left(\frac{\pi_{\theta}(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)}A_i,\text{clip}\left(\frac{\pi_{\theta}(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)},1-\epsilon,1&plus;\epsilon\right)A_i\right)-\beta&space;D_{KL}(\pi_{\theta}\|\pi_{\text{ref}})\right)\right]$$" title="$$J_{GRPO}(\theta)=\mathbb{E}_{q\sim P(Q)\{o_i\}_{i=1}^G\sim\pi_{\theta_{\text{old}}}(O|q)}\left[\frac{1}{G}\sum_{i=1}^G\left(\min\left(\frac{\pi_{\theta}(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)}A_i,\text{clip}\left(\frac{\pi_{\theta}(o_i|q)}{\pi_{\theta_{\text{old}}}(o_i|q)},1-\epsilon,1+\epsilon\right)A_i\right)-\beta D_{KL}(\pi_{\theta}\|\pi_{\text{ref}})\right)\right]$$" />
 
 - 모델이 Dataset $P(Q)$에서 질문 $q$를 가져옵니다.
@@ -196,7 +196,7 @@ PPO와 달리 별도의 가치망(critic)을 두지 않고, 한 프롬프트에 
    - 한 프롬프트 당 여러 응답을 생성해야 하므로, 대규모 샘플이 필요하며 하이퍼파라미터 튜닝이 요구됩니다.
    - 새로운 방법이기 때문에 수렴 보장이나 안정성에 관한 이론적 분석이 아직 부족합니다.
 
-### 2. Reward Modeling
+## 3.2. Reward Modeling
 연구진들은 DeepSeek-R1-Zero를 학습시키기 위해 주로 2가지 유형의 Reward로 구성된 규치 기반 Reward 시스템을 채택하였습니다.
 
 - Accuracy reward: 응답이 올바른지 평가하는 Reward Model
@@ -204,7 +204,7 @@ PPO와 달리 별도의 가치망(critic)을 두지 않고, 한 프롬프트에 
 
 연구진들은 DeepSeek-R1-Zero를 개발할 때 결과나 과정의 Neural Reward Model을 적용하지 않았습니다. 왜냐하면 Neural Reward Model은 대규모 강화 학습 과정에서 Reward Hacking의 피해를 입을 수 있고, Reward Model을 재학습하는 데 추가적인 학습 리소스가 필요하며 전체 학습 파이프라인을 복잡하게 만들기 때문입니다.
 
-### 3. Training Template
+## 3.3. Training Template
 
 DeepSeek-R1-Zero를 학습시키기 위해, 우리는 기본 모델이 지정된 지침을 따르도록 유도하는 간단한 템플릿을 먼저 설계했습니다.
 
@@ -213,7 +213,9 @@ DeepSeek-R1-Zero를 학습시키기 위해, 우리는 기본 모델이 지정된
 
 이 템플릿은 DeepSeek-R1-Zero가 먼저 추론 과정을 생성한 후 최종 답변을 제공하도록 요구합니다. 연구자들은 이 구조적 형식에 제약을 한정함으로써, 특정 문제 해결 전략을 촉진하는 등의 내용에 대한 편향은 피하고, RL 과정 동안 모델이 자연스럽게 발전하는 모습을 정확히 관찰할 수 있도록 의도적으로 제한하였습니다.
 
-### 4. Performance, Self-evolution Process and Aha Moment of DeepSeek-R1-Zero
+## 3.4. Performance, Self-evolution Process and Aha Moment of DeepSeek-R1-Zero
+### 3.4.1. Performance of DeepSeek-R1-Zero
+
 <img src="https://github.com/user-attachments/assets/c1daa3e6-9eb5-4866-9a40-57175d28a501" width=600>
 
 | 학습이 진행됨에 따라 DeepSeek-R1-Zero의 AIME 정확도의 변화를 나타낸 그래프
@@ -225,6 +227,8 @@ DeepSeek-R1-Zero를 학습시키기 위해, 우리는 기본 모델이 지정된
 위의 그림은 DeepSeek-R1-Zero의 Self-evolution 과정을 표현한 그래프입니다. 기본 모델에서 직접 RL을 함으로써, 모델이 시간이 지남에 따라 스스로의 사고 과정을 탐색하고 정교하게 다듬으면서 점 차 복잡한 추론 능력을 얻어갑니다.
 
 이는, 모델이 이전 단계를 다시 검토하고 평가하는 Reflection 과정을 통해서 추론 능력을 항상시킵니다.
+
+### 3.4.2. Aha Moment of DeepSeek-R1-Zero
 
 <img src="https://github.com/user-attachments/assets/5611b385-24f7-4cfb-a5bf-dc96f409268b" width=600>
 
