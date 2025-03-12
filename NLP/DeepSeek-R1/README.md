@@ -12,7 +12,7 @@
 DeepSeek Research는 DeepSeek-R1 발표에 있어 3가지의 결과를 논문에서 소개합니다.
 
 ### 1.1. DeepSeek-R1-Zero
-기존의 LLM은 Supervised Learning을 통한 Fine-Tuning으로 데이터를 추가 학습하면서 추론 능력을 항상시켰습니다. 이에 반해, DeepSeek Researcher들은 DeepSeel-R1-Zero가 Supervised Learning 없이 순수 Reinforcement Learning만으로 학습되어도 강력한 추론 능력을 발휘할 수 있음을 보여줍니다.
+기존의 LLM은 Supervised Learning을 통한 Fine-Tuning으로 데이터를 추가 학습하면서 추론 능력을 항상시켰습니다. 이에 반해, DeepSeek 연구진들은 DeepSeel-R1-Zero가 Supervised Learning 없이 순수 Reinforcement Learning만으로 학습되어도 강력한 추론 능력을 발휘할 수 있음을 보여줍니다.
 
 그러나 Fine-Tunning한 데이터가 없어서 DeepSeek-R1-Zero는 2가지의 문제점이 있는데, 첫째는 Poor Readability(가독성이 떨어지는) 답변, 다른 하나는 영어와 중국어 외 언어로 질문을 할시에 CoT(Chain of Thought)가 영어로 작성되기에 답변도 영어로 나오는 Language Mixing 문제점이 있습니다.
 
@@ -33,7 +33,7 @@ OpenAI-o1 시리즈는 사후훈련 중 하나인 Chain-of-Thought(COT)를 도�
 #### 2) Reinforcement Learning
 #### 3) Monte Carlo Tree Search
 
-그러나 이 방법들도 OpenAI o1 시리즈와 비교할 만한 일반적인 추론 성능 향상을 이루지는 못했습니다. 이에 DeepSeek Researcher들은 Supervised Learning 데이터 없이 자기 혼자서 생각하면서 모델을 발전시키는 방법을 개발하게 되었습니다. 
+그러나 이 방법들도 OpenAI o1 시리즈와 비교할 만한 일반적인 추론 성능 향상을 이루지는 못했습니다. 이에 DeepSeek 연구진들은 Supervised Learning 데이터 없이 자기 혼자서 생각하면서 모델을 발전시키는 방법을 개발하게 되었습니다. 
 
 논문 저자들은 DeepSeek-V3-Base를 기본 모델로 GRPO (Group Relative Policy Optimization)를 아용해 강화시켰습니다. 훈련을 통해서 DeepSeek-R1-Zero 모델이 자연스럽게 만들어졌으며, 벤치마크 성능을 살펴본 결과 수학문제 데이터인 AIME의 결과가 pass@1 Score가 15.6%에서 71% 까지 증가 했습니다.
 또한, Majority voting 86.7% 까지 성능을 올렸습니다.
@@ -193,6 +193,12 @@ PPO와 달리 별도의 가치망(critic)을 두지 않고, 한 프롬프트에 
    - 새로운 방법이기 때문에 수렴 보장이나 안정성에 관한 이론적 분석이 아직 부족합니다.
 
 ### 2. Reward Modeling
+연구진들은 DeepSeek-R1-Zero를 학습시키기 위해 주로 2가지 유형의 Reward로 구성된 규치 기반 Reward 시스템을 채택하였습니다.
+
+- Accuracy reward: 응답이 올바른지 평가하는 Reward Model
+- Format reward: 사고 과정을 <think>와 </think> 태그 사이에 두도록 하는 Reward Model
+
+연구진들은 DeepSeek-R1-Zero를 개발할 때 결과나 과정의 Neural Reward Model을 적용하지 않았습니다. 왜냐하면 Neural Reward Model은 대규모 강화 학습 과정에서 Reward Hacking의 피해를 입을 수 있고, Reward Model을 재학습하는 데 추가적인 학습 리소스가 필요하며 전체 학습 파이프라인을 복잡하게 만들기 때문입니다.
 
 ### 3. Training Template
 
