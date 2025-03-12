@@ -67,7 +67,7 @@ Majority Voting
 - **Environments**  
   Agent는 행동(액션)을 선택하여 환경에 영향을 주고, 환경은 이에 따라 보상과 다음 상태를 반환합니다.
 
-- **Policy:**  
+- **Policy**  
   Agnet가 주어진 상태에서 어떤 행동을 취할지를 결정하는 전략입니다.
   
   보통 확률 분포 $\pi_\theta(a \mid s)$로 표현됩니다.
