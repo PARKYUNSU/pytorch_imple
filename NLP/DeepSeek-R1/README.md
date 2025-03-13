@@ -206,7 +206,7 @@ PPO와 달리 별도의 가치망(critic)을 두지 않고, 한 프롬프트에 
 
 ## 3.3. Training Template
 
-DeepSeek-R1-Zero를 학습시키기 위해, 우리는 기본 모델이 지정된 지침을 따르도록 유도하는 간단한 템플릿을 먼저 설계했습니다.
+DeepSeek-R1-Zero를 학습시키기 위해, 기본 모델이 지정된 지침을 따르도록 유도하는 간단한 템플릿을 먼저 설계했습니다.
 
 ![image](https://github.com/user-attachments/assets/7a3d2a88-e013-409c-93e7-ca47cc4e5b4f)
 
@@ -273,4 +273,4 @@ DeepSeek-R1-Zero와는 달리, 기본 모델에서 RL 학습의 초기 불안정
 여기서 reasoning_process 는 해당 질의에 대한 Chain-of-Thought(사고 과정)를, summary 는 그 추론 결과를 요약한 부분을 나타냅니다.
 
 #### 잠재력
-인간의 사전 지식을 반영하여 Cold Start 데이터의 패턴을 신중하게 설계한 결과, DeepSeek-R1은 DeepSeek-R1-Zero보다 뛰어난 성능을 달성할 수 있음을 확인했습니다. 우리는 반복 학습(iterative training)이 추론 모델에 더욱 적합한 방법임을 믿으며, 이를 통해 모델의 잠재력을 극대화할 수 있다고 판단합니다.
+인간의 사전 지식을 반영하여 Cold Start 데이터의 패턴을 신중하게 설계한 결과, DeepSeek-R1은 DeepSeek-R1-Zero보다 뛰어난 성능을 달성할 수 있음을 확인했습니다. 연구진들은 반복 학습(iterative training)이 추론 모델에 더욱 적합한 방법임을 믿으며, 이를 통해 모델의 잠재력을 극대화할 수 있다고 판단합니다.
