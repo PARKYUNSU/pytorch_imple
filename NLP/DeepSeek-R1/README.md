@@ -262,14 +262,15 @@ DeepSeek-R1-Zero와는 달리, 기본 모델에서 RL 학습의 초기 불안정
 - DeepSeek-R1-Zero의 출력을 읽기 쉬운 형식으로 수집
 - 사람이 직접 후처리를 통해 결과를 정제
 
-이 연구에서는 수천 개의 Cold Start 데이터를 수집하여 DeepSeek-V3-Base를 RL의 시작점으로 미세 조정했습니다.
-DeepSeek-R1-Zero와 비교했을 때 Cold Start 데이터의 장점은 다음과 같습니다:
+이 연구에서는 수천 개의 Cold Start 데이터를 수집하여 DeepSeek-V3-Base를 RL의 시작점으로 Fine-Tuning 했고 다음과 같은 장점이 생겼습니다.
 
-가독성:
-DeepSeek-R1-Zero의 주요 한계점 중 하나는 응답의 가독성이 떨어진다는 것입니다. 응답은 여러 언어가 혼합되거나, 사용자에게 답변을 강조할 수 있는 마크다운 형식이 부족할 수 있습니다. 반면, DeepSeek-R1의 Cold Start 데이터를 생성할 때, 우리는 각 응답의 끝에 요약을 포함하고, 읽기 어려운 응답은 걸러내는 읽기 좋은 패턴을 설계했습니다. 여기서 우리는 출력 형식을 
-$$|special_token|<reasoning_process>|special_token|<summary>$$
+#### 가독성
+기존에는 Poor Readability있는 반면, DeepSeek-R1에서는 Cold Start 데이터를 생성할 때 각 응답의 끝에 요약을 추가하고, 읽기 어려운 응답은 걸러내는 사용자 친화적인 패턴을 설계했습니다. 출력 형식은 다음과 같이 정의됩니다,
 
-로 정의합니다. 이때 <reasoning_process>는 해당 질의에 대한 CoT를, <summary>는 추론 결과를 요약하는 부분입니다.
+```php-template
+|special_token|<reasoning_process>|special_token|<summary>
+```
+여기서 <reasoning_process>는 해당 질의에 대한 Chain-of-Thought(사고 과정)를, <summary>는 그 추론 결과를 요약한 부분을 나타냅니다.
 
-잠재력:
-인간의 사전 지식을 반영하여 Cold Start 데이터의 패턴을 신중하게 설계함으로써, DeepSeek-R1-Zero보다 더 나은 성능을 달성할 수 있음을 관찰했습니다. 우리는 반복 학습(iterative training)이 추론 모델에 더 적합한 방법이라고 믿습니다.
+#### 잠재력
+인간의 사전 지식을 반영하여 Cold Start 데이터의 패턴을 신중하게 설계한 결과, DeepSeek-R1은 DeepSeek-R1-Zero보다 뛰어난 성능을 달성할 수 있음을 확인했습니다. 우리는 반복 학습(iterative training)이 추론 모델에 더욱 적합한 방법임을 믿으며, 이를 통해 모델의 잠재력을 극대화할 수 있다고 판단합니다.
