@@ -68,7 +68,7 @@
 |---------------------------------------------|-----|
 | **[OpenVoice - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/Openvoice)**  | 2024|
 | **[USDM (Unified Spoken Dialog Model)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/USDM)**  | 2023 |
-| **[VITS (Conditional Variational Autoencoder with Adversarial Learning for End-to-End Text-to-Speech)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/USDM)**  | 2021 |
+| **[VITS (Variational Inference with adversarial learning for end-to-end Text-to-Speech)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/USDM)**  | 2021 |
 
 
 # Multimodal
