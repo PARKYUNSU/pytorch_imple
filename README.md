@@ -68,7 +68,7 @@
 |---------------------------------------------|-----|
 | **[OpenVoice - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/Openvoice)**  | 2024|
 | **[USDM (Unified Spoken Dialog Model)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/USDM)**  | 2023 |
-| **[VITS (Variational Inference with adversarial learning for end-to-end Text-to-Speech)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/USDM)**  | 2021 |
+| **[VITS (Variational Inference with adversarial learning for end-to-end Text-to-Speech)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Audio/VITS)**  | 2021 |
 
 
 # Multimodal
@@ -82,4 +82,4 @@
 # Reinforcement Learning
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
-| **[PPO (Proximal Policy Optimization Algorithms)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/RL/ppo)**  | 2017 |
+| **[PPO (Proximal Policy Optimization Algorithms) - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/RL/ppo)**  | 2017 |
