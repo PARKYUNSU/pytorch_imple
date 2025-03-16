@@ -37,6 +37,11 @@ OpenAI-o1 시리즈는 사후훈련 중 하나인 Chain-of-Thought(COT)를 도�
 
 논문 저자들은 DeepSeek-V3-Base를 기본 모델로 GRPO (Group Relative Policy Optimization)를 아용해 강화시켰습니다. 훈련을 통해서 DeepSeek-R1-Zero 모델이 자연스럽게 만들어졌으며, 벤치마크 성능을 살펴본 결과 수학문제 데이터인 AIME의 결과가 pass@1 Score가 15.6%에서 71% 까지 증가 했습니다.
 또한, Majority voting 86.7% 까지 성능을 올렸습니다.
+
+#### pass@1 계산법
+
+$$pass@1 = \frac{1}{k}\sum^k_{i=1}P_{i}$$
+
 ```text
 pass@1
 
