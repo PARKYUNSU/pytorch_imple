@@ -243,6 +243,7 @@ DeepSeek-R1-Zero를 학습시키기 위해, 기본 모델이 지정된 지침을
 
 
 ## 3.5. DeepSeek-R1: Reinforcement Learning with Cold StartPermalink
+DeepSeek-R1은 Cold Start 데이터를 통한 초기 Fine-Tuning과 이후의 강화학습(RL) 단계를 결합하여, 모델이 단순한 순수 RL 방식(DeepSeek-R1-Zero)에서 발생하는 문제점을 극복하고, 사용자 친화적인 응답과 강력한 추론 능력을 갖추도록 설계되었습니다. 이제 Cold Start 데이터의 장점과, 이후 RL 및 증류 과정을 통해 전체 파이프라인이 어떻게 구성되었는지 자세히 살펴보겠습니다.
 
 DeepSeek-R1-Zero는 순수 강화학습(RL)만 사용하여 학습된 모델로, 뛰어난 추론 능력을 보여주지만 두 가지 문제가 있습니다.
 
@@ -252,30 +253,81 @@ DeepSeek-R1-Zero는 순수 강화학습(RL)만 사용하여 학습된 모델로,
 #### 2) Language Mixing 문제
 &nbsp; 영어와 중국어 외의 언어로 질문할 때, Chain-of-Thought가 영어로만 생성되어 결과적으로 응답도 영어로 나오는 문제입니다.
 
-이러한 문제 때문에 연구진들은 다음 두 가지 의문을 제기합니다.
+이러한 문제로 인해 연구진들은 다음 두 가지 의문을 제기합니다.
 
-1. 소량의 고품질 데이터를 Cold Start로 통합하면, 추론 성능을 개선하거나 수렴 속도를 높일 수 있을까?
+1. 소량의 고품질 데이터를 Cold Start로 통합하면, 이러한 문제들을 완화하면서 추론 성능을 개선하거나 수렴 속도를 높일 수 있을까?
    
-2. 명확하고 일관된 CoT와 함께 강력한 일반 능력을 가진 사용자 친화적인 모델을 어떻게 학습시킬 수 있을까?
+2. 명확하고 일관된 CoT를 생성함과 동시에, 강력한 일반 능력을 가진 사용자 친화적인 모델을 어떻게 학습시킬 수 있을까?
 
-연구진들은 의문들을 4가지의 단계인 파이프라인을 설계함으로써 해결했습니다.
+DeepSeek-R1-Zero는 순수 RL만 사용하여 학습된 모델로써, 초기 단계에서 Cold Start의 불안정성이 발생할 수 있습니다.
 
-DeepSeek-R1-Zero와는 달리, 기본 모델에서 RL 학습의 초기 불안정한 Cold Start 단계를 방지하기 위해, DeepSeek-R1의 경우 소량의 긴 CoT 데이터를 수집하여 초기 RL actor로서 모델을 Fine-Tuning 했습니다. 이러한 데이터를 수집하기 위해 아래의 단계를 거쳤습니다.
+### 3.5.1. Cold Start
+
+이런 초기 불안정성을 방지하기 위해, DeepSeek-R1에서는 RL 학습 전에 소량의 긴 CoT 데이터를 수집하여 모델을 Fine-Tuning합니다. 이 과정을 통해 모델은 초기 RL Actor 역할을 수행할 준비가 됩니다.
+
+연구진들은 위의 의문과 초기 불안정성을 해결하기 위해, 다음 4가지 단계의 파이프라인을 설계하여 고품질 데이터를 수집했습니다.
 
 - 긴 CoT를 예시로 하는 few-shot prompting 사용
 - 모델에 직접 프롬프트하여 reflection과 verification을 거친 자세한 답변 생성 유도
 - DeepSeek-R1-Zero의 출력을 읽기 쉬운 형식으로 수집
 - 사람이 직접 후처리를 통해 결과를 정제
 
-이 연구에서는 수천 개의 Cold Start 데이터를 수집하여 DeepSeek-V3-Base를 RL의 시작점으로 Fine-Tuning 했고 다음과 같은 장점이 생겼습니다.
 
-#### 가독성
+결과적으로 수천 개의 Cold Start 데이터를 수집할 수 있었고 장점이 생겼습니다.
+
+#### 가독성 개선
 기존에는 Poor Readability있는 반면, DeepSeek-R1에서는 Cold Start 데이터를 생성할 때 각 응답의 끝에 요약을 추가하고, 읽기 어려운 응답은 걸러내는 사용자 친화적인 패턴을 설계했습니다. 출력 형식은 다음과 같이 정의됩니다,
 
-```php-template
-|special_token|<reasoning_process>|special_token|<summary>
-```
-여기서 reasoning_process 는 해당 질의에 대한 Chain-of-Thought(사고 과정)를, summary 는 그 추론 결과를 요약한 부분을 나타냅니다.
+![image](https://github.com/user-attachments/assets/215e8dc4-514b-42e0-b1fc-0491a5757964)
 
-#### 잠재력
+여기서 reasoning_process는 해당 질의에 대한 Chain-of-Thought(사고 과정)를 보여주며 디버깅 같은 거로 사용자가 직접 볼 필요없는 데이터며, summary는 그 추론 결과 즉 최종적으로 사용자에게 보여줄 간결한 답변을 요약입니다.
+
+추론 과정은 숨겨지고, 최종 결과를 사용자가 쉽게 이해할 수 있도록 해서 사용자 친화적인 패턴이라고 할 수 있겠습니다.
+
+#### 잠재력 증대
 인간의 사전 지식을 반영하여 Cold Start 데이터의 패턴을 신중하게 설계한 결과, DeepSeek-R1은 DeepSeek-R1-Zero보다 뛰어난 성능을 달성할 수 있음을 확인했습니다. 연구진들은 반복 학습(iterative training)이 추론 모델에 더욱 적합한 방법임을 믿으며, 이를 통해 모델의 잠재력을 극대화할 수 있다고 판단합니다.
+
+
+### 3.4.2. Reasoning-oriented Reinforcement Learning
+Cold Start 데이터를 통한 초기 미세 조정 이후, DeepSeek-V3-Base를 기반으로 DeepSeek-R1-Zero와 유사한 대규모 강화학습을 진행합니다.
+
+RL 훈련 중에 Chain-of-Thought에서 Language Mixing 문제를 해결하기 위해, CoT 내 목표 언어 단어의 비율을 계산하여 언어 일관성 보상(language consistency reward)을 도입합니다.
+이 보상은 모델의 응답이 보다 일관되게 목표 언어로 작성되도록 유도합니다.
+
+추론 작업의 정확도와 언어 일관성 보상을 직접 합산하여 최종 보상으로 사용합니다.
+
+모델은 이 보상 신호를 최대화하기 위해 RL 훈련을 반복하며, 결국 수렴할 때까지 모델의 추론 능력을 지속적으로 개선합니다.
+
+결과적으로 코딩, 수학, 과학, 논리 추론 등 명확한 해답을 가진 문제들에서 모델의 추론 능력을 더욱 향상시킬 수 있었습니다.
+
+### 3.4.3. Rejection Sampling and Supervised Fine-Tuning
+추론 중심 RL이 수렴한 후, 그 체크포인트를 사용하여 추가적인 지도 학습(SFT) 데이터를 수집합니다. 전체적으로 약 80만 개의 데이터를 수집한 후, 이를 통해 DeepSeek-V3-Base를 2 에폭 동안 미세 조정합니다.
+
+수집한 SFT 데이터는 크게 두 가지 항목으로 구성됩니다.
+
+#### 1. Reasoning Data
+RL 훈련에서 생성된 여러 응답 중 규칙 기반 보상으로 평가 가능한, 올바른 응답들을 거부 샘플링(rejection sampling)을 통해 선별하여 확장한 데이터입니다.
+
+#### 2. Non-Reasoning Data
+글쓰기, 사실 기반 QA, 자기 인식, 번역 등 일반적인 작업에 대한 데이터를 기존 DeepSeek-V3의 SFT 데이터에서 재사용한 데이터입니다.
+
+
+### 3.4.4. Reinforcement Learning for all Scenarios
+모델을 인간의 선호에 맞게 정렬(align)하기 위해, 추가적인 RL 단계가 진행됩니다.
+
+Reasoning 데이터와 일반 데이터 모두에 대해 보상 신호를 통합하여, 모델이 단순한 추론 능력뿐만 아니라 유용하고 무해한 응답을 생성하도록 합니다.
+
+응답의 최종 요약 부분에 집중하여, 사용자에게 실질적인 도움이 되고 불필요한 위험이나 편향이 발생하지 않도록 전체 응답을 평가합니다.
+
+
+### 3.4.5. Distillation: Empower Small Models with Reasoning Capability
+
+마지막 단계로, DeepSeek-R1의 추론 능력을 더 작은 밀집 모델에 증류하여, 경량화된 모델에서도 우수한 성능을 구현할 수 있도록 합니다.
+
+Qwen2.5와 Llama 시리즈 기반의 모델들을 사용합니다.
+
+구체적으로, Qwen2.5-Math-1.5B, 7B, 14B, 32B, 그리고 Llama-3.1-8B, Llama-3.3-70B-Instruct 등이 있습니다.
+
+오직 지도 학습(SFT)만을 적용하며, RL 단계는 제외합니다. 이는 증류 자체가 단순하면서도 효과적임을 입증하기 위한 목적입니다.
+
+증류된 소규모 모델들은 AIME, MATH-500, Codeforces 등 여러 벤치마크에서 뛰어난 성능을 보이며, 기존의 오픈소스 모델들을 크게 능가합니다.
