@@ -338,12 +338,6 @@ Reasoning 데이터와 일반 데이터 모두에 대해 보상 신호를 통합
 
 응답의 최종 요약 부분에 집중하여, 사용자에게 실질적인 도움이 되고 불필요한 위험이나 편향이 발생하지 않도록 전체 응답을 평가합니다.
 
-#### Helpfulness
-
-
-#### Harmlessness
-
-
 
 ### 3.4.5. Distillation: Empower Small Models with Reasoning Capability
 
