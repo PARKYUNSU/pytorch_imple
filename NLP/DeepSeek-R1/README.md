@@ -151,7 +151,7 @@ $r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\text{old}}(a_t \mid s_t)}$�
 ```rust
 for iteration = 1, 2, ... do # 학습과정 반복, 각 반복에서 Policy 업데이트
     for actor = 1, 2, ..., N do # 병렬 actors를 통해 데이터 모으기
-        Run policy π_old in environment for T timesteps $ 각 actor는 old policy를 사용해서 T step 동안 시뮬레이션 진행
+        Run policy π_old in environment for T timesteps # 각 actor는 old policy를 사용해서 T step 동안 시뮬레이션 진행
         Compute advantage estimates A1, ..., A_T # state, action, reward를 수집하고 advantage를 계산
     end for
     Optimize surrogate L wrt θ, with K epochs and minibatch size M ≤ N*T # 수집된
