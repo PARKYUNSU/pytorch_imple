@@ -360,7 +360,7 @@ Qwen2.5와 Llama 시리즈 기반의 모델들을 사용합니다.
 <img src="https://github.com/user-attachments/assets/3927cbd8-4b2e-43ef-946a-32a8ddf3978c" width=700>
 
 ## 4.3. Distillation vs. Reinforcement Learning
-<imsg src="https://github.com/user-attachments/assets/a9200472-8cc7-46b4-9a71-56ce985aeb8a" width=700>
+<img src="https://github.com/user-attachments/assets/a9200472-8cc7-46b4-9a71-56ce985aeb8a" width=700>
 
 
 # 5. Limitations
