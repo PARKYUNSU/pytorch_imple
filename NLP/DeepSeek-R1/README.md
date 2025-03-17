@@ -350,3 +350,27 @@ Qwen2.5와 Llama 시리즈 기반의 모델들을 사용합니다.
 오직 지도 학습(SFT)만을 적용하며, RL 단계는 제외합니다. 이는 증류 자체가 단순하면서도 효과적임을 입증하기 위한 목적입니다.
 
 증류된 소규모 모델들은 AIME, MATH-500, Codeforces 등 여러 벤치마크에서 뛰어난 성능을 보이며, 기존의 오픈소스 모델들을 크게 능가합니다.
+
+
+# 4. Experiment
+## 4.1. DeepSeek-R1 Evaluation
+<img src="https://github.com/user-attachments/assets/be3ecef1-9128-419c-a7db-d9559d4186f5" width=700>
+
+## 4.2. Distilled Model Evaluation
+<img src="https://github.com/user-attachments/assets/3927cbd8-4b2e-43ef-946a-32a8ddf3978c" width=700>
+
+## 4.3. Distillation vs. Reinforcement Learning
+<imsg src="https://github.com/user-attachments/assets/a9200472-8cc7-46b4-9a71-56ce985aeb8a" width=700>
+
+
+# 5. Limitations
+
+### DeepSeek-R1의 한계점
+
+- 함수 호출, 다중 턴 대화, 복잡한 역할극, JSON 출력 등 특정 작업에서 DeepSeek-V3에 비해 일반 성능이 부족합니다.
+
+- 현재 모델은 중국어와 영어에 최적화되어 있어, 이 외의 언어로 질의를 할 경우 언어 혼합 현상이 발생하여 응답이 영어로만 출력되는 문제가 있습니다.
+
+- Few-shot 프롬프트 사용 시 성능이 일관되게 떨어지는 경향이 있어, 보다 명확한 zero-shot 설정이 필요합니다.
+
+- RL 평가 시간이 길어 소프트웨어 엔지니어링 작업에 충분히 적용되지 못해, 관련 벤치마크에서 DeepSeek-V3에 비해 큰 개선이 나타나지 않는 문제점이 있습니다.
