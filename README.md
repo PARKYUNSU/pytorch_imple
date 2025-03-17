@@ -9,7 +9,6 @@
 | 논문 제목                                                   | 연도 |
 |-----------------------------------------------------------|-----|
 | [**HViT (Hyperbolic Vision Transformer)**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/HVT)                   | 2022 |
-| [**LoRA (Low-Rank Adaptation)** - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/LoRA)                            | 2021 |
 | [**GhostNet**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/GhostNet)                                              | 2020 |
 | [**Vision Transformer**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/Vision_Transformer)                           | 2020 |
 | [**MobileNetV3**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/MobileNetV3)                                          | 2019 |
@@ -40,6 +39,8 @@
 ### Self Supervised
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
+| [**DINOV1 (Emerging Properties in Self-Supervised Vision Transformers)**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/DINOv1)                            | 2021 |
+| [**LoRA (Low-Rank Adaptation)** - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/LoRA)                            | 2021 |
 | **[MaskSplit (Self-supervised Few-shot Semantic Segmentation) - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Self%20Supervised/MaskSplit)**  | 2021 |
 | **[SimSiam (Simple Siamese)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Self%20Supervised/SimSiam)**  | 2021 |
 
