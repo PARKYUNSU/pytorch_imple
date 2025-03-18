@@ -26,7 +26,7 @@ Sudent 네트워크의 출력에 대해 Softmax 정규화로 얻는 확률 값
 
 $$P_s(x)^{(i)} = \frac{exp(\frac{g_{\theta_{s}(x)^{(i)}}}{\tau_{s}})}{\sum^K_{k=1}exp(\frac{g_{\theta_{s}(x)^{(k)}}}{\tau_{s}})}\quad for i = 1, ..., K$$
 
-$$Where$$
+$Where$
 
 $$x$$: 이미지
 
