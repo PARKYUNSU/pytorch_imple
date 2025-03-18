@@ -24,7 +24,7 @@ DINO에서는 입력 이미지 $x$에 대해 두 개 이상의 왜곡된 뷰(vie
 
 #### Sudent 네트워크의 출력 확률 분포
 
-$$P_s(x)^{(i)} = \frac{exp(\frac{g_{\theta_{s}(x)^{(i)}}}{\tau_{s}})}{\sum^K_{k=1}exp(\frac{g_{\theta_{s}(x)^{(k)}}}{\tau_{s}})}\quad for i = 1, ..., K$$
+$$P_s(x)^{(i)} = \frac{exp(\frac{g_{\theta_{s}(x)^{(i)}}}{\tau_{s}})}{\sum^K_{k=1}exp(\frac{g_{\theta_{s}(x)^{(k)}}}{\tau_{s}})}\quad for\quad i = 1, ..., K$$
 
 $Where$
 
