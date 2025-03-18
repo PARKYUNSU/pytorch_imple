@@ -29,5 +29,7 @@ $$P_s(x)^{(i)} = \frac{exp(\frac{g_{\theta_{s}(x)^{(i)}}}{\tau_{s}})}{\sum^K_{k=
 $$Where$$
 
 $$x$$: 이미지
+
 $$g_{\theta_{s/t}}$$ : Student / Teacher network
+
 $$\theta_{s/t}$$ : Student / Teacher Parameters
