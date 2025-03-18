@@ -30,11 +30,9 @@ $Where$
 
 $$x$$: 이미지
 
-$$g_{\theta_{s}}$$ : Student / Teacher network
+$g_{\theta_s}(x)^{(i)}$ : Student Network의 $i$ 번째 logit 값
 
-$$\theta_{s}$$ : Student
-
-$$\tau_{s}$$ : Temperature로 SoftMax 정규화 시 사용
+$\tau_{s}$ : Student Temperature로 SoftMax 정규화 시 사용하며 확률 분포의 Sharpness를 조절  (여기서 $\tau_{s} > 0$)
 
 #### Teacher 네트워크의 출력 확츌 분포
 
@@ -42,8 +40,8 @@ $$P_t(x)^{(i)} = \frac{exp(\frac{(g_{\theta_{t}}(x)^{(i)} - c^{(i)})}{\tau_t})}{
 
 $Where$
 
-$(g_{\theta_{t}}(x)^{(i)}$ : Teacher Network의 $i$ 번째 logit 값
+$g_{\theta_{t}}(x)^{(i)}$ : Teacher Network의 $i$ 번째 logit 값
 
 $c^{(i)}$ : $K$차원 Center 벡터 $c$에서 $i$ 번째 차원 값
 
-$$
+$$\tau_{t}$$ : Teacher Temperature로 SoftMax 정규화 시 사용하며 확률 분포의 Sharpness를 조절 (여기서 $\tau_{t} > 0$)
