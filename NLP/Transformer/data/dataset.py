@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
-from transformers import PreTrainedTokenizerFast
+from transformers import GPT2TokenizerFast
 
 # 토큰 정의 (필요에 따라 수정)
 BOS = "</s>"
@@ -17,8 +17,7 @@ Q_TKN = "<usr>"     # 질문 시작 토큰 (예시)
 A_TKN = "<sys>"     # 답변 시작 토큰 (예시)
 SENT = "<unused1>"  # 문장 구분 토큰 (예시)
 
-# KoGPT2 토크나이저 로드
-koGPT2_TOKENIZER = PreTrainedTokenizerFast.from_pretrained(
+koGPT2_TOKENIZER = GPT2TokenizerFast.from_pretrained(
     "skt/kogpt2-base-v2",
     bos_token=BOS,
     eos_token=EOS,
