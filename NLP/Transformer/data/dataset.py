@@ -138,6 +138,6 @@ if __name__ == "__main__":
     # CSV 파일 읽기
     df = pd.read_csv(filename)
     # 테스트용으로 상위 300개 샘플만 사용
-    df = df[:300]
+    df = df[:10000]
     print("데이터 미리보기:")
     print(df.head())
