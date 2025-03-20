@@ -15,17 +15,16 @@ def train_one_epoch(model, dataloader, criterion, optimizer, device, num_heads):
         
         src_mask, tgt_mask, memory_mask = create_mask(src, tgt_in, pad_idx=0)
         src_mask = src_mask.to(device)
-        # 여기서 tgt_mask 확장: (batch, 1, seq_len, seq_len) -> (batch, num_heads, seq_len, seq_len)
+        # 확장: [batch, 1, tgt_len, tgt_len] -> [batch, num_heads, tgt_len, tgt_len]
         tgt_mask = tgt_mask.to(device).expand(tgt_mask.size(0), num_heads, tgt_mask.size(2), tgt_mask.size(3))
         if memory_mask is not None:
             memory_mask = memory_mask.to(device)
 
         outputs = model(src, tgt_in, tgt_mask=tgt_mask, memory_mask=memory_mask)
-        outputs_reshaped = outputs.reshape(-1, outputs.size(-1))
+        outputs_reshaped = outputs.view(-1, outputs.size(-1))
         tgt_out_reshaped = tgt_out.reshape(-1)
 
         loss = criterion(outputs_reshaped, tgt_out_reshaped)
-
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
@@ -54,7 +53,7 @@ def validate_one_epoch(model, dataloader, criterion, device, num_heads):
                 memory_mask = memory_mask.to(device)
 
             outputs = model(src, tgt_in, tgt_mask=tgt_mask, memory_mask=memory_mask)
-            outputs_reshaped = outputs.reshape(-1, outputs.size(-1))
+            outputs_reshaped = outputs.view(-1, outputs.size(-1))
             tgt_out_reshaped = tgt_out.reshape(-1)
 
             loss = criterion(outputs_reshaped, tgt_out_reshaped)
