@@ -31,8 +31,8 @@ class PositionalEncoding(nn.Module):
     def forward(self, x):
         # 입력 시퀀스 길이에 맞게 슬라이싱
         seq_len = x.size(1)  # 실제 seq_len
-        pe_slice = self.pe[:, :seq_len, :].to(x.device)
-
+        pe_slice = self.pe[:seq_len, :]
+        pe_slice = pe_slice.unsqueeze(0) 
         # 최종 출력: 입력 + 위치 인코딩, 이후 드롭아웃
         x = x + pe_slice
         return self.dropout(x)
