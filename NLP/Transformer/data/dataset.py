@@ -105,21 +105,21 @@ def download_data(url="https://raw.githubusercontent.com/songys/Chatbot_data/mas
         print(f"'{filename}' 파일이 이미 존재합니다.")
     return filename
 
-# --- create_mask 함수 추가 ---
 def create_mask(src, tgt, pad_idx):
-    # src: [batch, src_seq_len], tgt: [batch, tgt_seq_len]
-    # src_mask: padding mask for encoder inputs
+    # src: [batch, src_seq_len]
+    # tgt: [batch, tgt_seq_len]
     src_mask = (src != pad_idx).unsqueeze(1)  # (batch, 1, src_seq_len)
     
-    # tgt_mask: padding mask for decoder inputs
     tgt_mask = (tgt != pad_idx).unsqueeze(1)  # (batch, 1, tgt_seq_len)
-    
-    # 생성 마스크: decoder의 미래 정보를 보지 않도록 함 (upper triangular mask)
     tgt_seq_len = tgt.size(1)
+    # 생성 마스크: decoder의 미래 정보를 보지 않도록 (upper triangular mask)
     subsequent_mask = torch.triu(torch.ones((tgt_seq_len, tgt_seq_len), device=tgt.device), diagonal=1).bool()
-    combined_tgt_mask = tgt_mask & ~subsequent_mask
-
-    memory_mask = None  # 보통은 사용하지 않거나 별도로 구현
+    
+    # tgt_mask는 현재 (batch, 1, tgt_seq_len)
+    # squeeze 후 (batch, tgt_seq_len)와 subsequent_mask (tgt_seq_len, tgt_seq_len)를 결합한 후 다시 unsqueeze
+    combined_tgt_mask = (tgt_mask.squeeze(1) & ~subsequent_mask).unsqueeze(1)  # 최종: (batch, 1, tgt_seq_len, tgt_seq_len)
+    
+    memory_mask = None
     return src_mask, combined_tgt_mask, memory_mask
 
 if __name__ == "__main__":
