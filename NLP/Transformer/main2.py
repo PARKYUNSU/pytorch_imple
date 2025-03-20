@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from torch.utils.data import DataLoader
 
-from data.dataset import ChatbotDataset, collate_batch, download_data
+from data.dataset import ChatbotDataset, collate_batch, download_data, koGPT2_TOKENIZER
 from train import train_one_epoch, validate_one_epoch
 from model.transformer import Transformer
 
@@ -47,14 +47,13 @@ def main():
 
     # 모델, 손실 함수, 옵티마이저 생성
     model = Transformer(
-        num_layers=args.num_layers,
-        d_model=args.d_model,
-        num_heads=args.num_heads,
-        d_ff=args.d_ff,
-        vocab_size=args.vocab_size,
-        max_seq_len=args.max_seq_len,
-        dropout=args.dropout
-    ).to(device)
+    num_layers=args.num_layers,
+    d_model=args.d_model,
+    num_heads=args.num_heads,
+    d_ff=args.d_ff,
+    vocab_size=koGPT2_TOKENIZER.vocab_size,
+    max_seq_len=args.max_seq_len,
+    dropout=args.dropout).to(device)
 
     criterion = nn.CrossEntropyLoss(ignore_index=0)
     optimizer = optim.Adam(model.parameters(), lr=args.lr)
