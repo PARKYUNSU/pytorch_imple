@@ -1,4 +1,3 @@
-# data/dataset.py
 import os
 import urllib.request
 import re
@@ -6,7 +5,7 @@ import numpy as np
 import pandas as pd
 import torch
 from torch.utils.data import Dataset
-from transformers import GPT2TokenizerFast
+from transformers import PreTrainedTokenizerFast
 
 # 토큰 정의 (필요에 따라 수정)
 BOS = "</s>"
@@ -17,7 +16,8 @@ Q_TKN = "<usr>"     # 질문 시작 토큰 (예시)
 A_TKN = "<sys>"     # 답변 시작 토큰 (예시)
 SENT = "<unused1>"  # 문장 구분 토큰 (예시)
 
-koGPT2_TOKENIZER = GPT2TokenizerFast.from_pretrained(
+# KoGPT2 토크나이저 로드
+koGPT2_TOKENIZER = PreTrainedTokenizerFast.from_pretrained(
     "skt/kogpt2-base-v2",
     bos_token=BOS,
     eos_token=EOS,
@@ -61,7 +61,7 @@ class ChatbotDataset(Dataset):
             if a_len <= 0:
                 q_toked = q_toked[-(int(self.max_len / 2)):]
                 q_len = len(q_toked)
-                a_len = self.max_len - q_len
+                a_len = self.max_seq_len - q_len
             a_toked = a_toked[:a_len]
             a_len = len(a_toked)
 
@@ -104,6 +104,23 @@ def download_data(url="https://raw.githubusercontent.com/songys/Chatbot_data/mas
     else:
         print(f"'{filename}' 파일이 이미 존재합니다.")
     return filename
+
+# --- create_mask 함수 추가 ---
+def create_mask(src, tgt, pad_idx):
+    # src: [batch, src_seq_len], tgt: [batch, tgt_seq_len]
+    # src_mask: padding mask for encoder inputs
+    src_mask = (src != pad_idx).unsqueeze(1)  # (batch, 1, src_seq_len)
+    
+    # tgt_mask: padding mask for decoder inputs
+    tgt_mask = (tgt != pad_idx).unsqueeze(1)  # (batch, 1, tgt_seq_len)
+    
+    # 생성 마스크: decoder의 미래 정보를 보지 않도록 함 (upper triangular mask)
+    tgt_seq_len = tgt.size(1)
+    subsequent_mask = torch.triu(torch.ones((tgt_seq_len, tgt_seq_len), device=tgt.device), diagonal=1).bool()
+    combined_tgt_mask = tgt_mask & ~subsequent_mask
+
+    memory_mask = None  # 보통은 사용하지 않거나 별도로 구현
+    return src_mask, combined_tgt_mask, memory_mask
 
 if __name__ == "__main__":
     # 데이터 파일 다운로드 (필요한 경우)

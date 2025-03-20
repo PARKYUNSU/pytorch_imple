@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-from data import create_mask
+from data.dataset import create_mask
 
 def train_one_epoch(model, dataloader, criterion, optimizer, device):
     model.train()
