@@ -90,9 +90,9 @@ class ChatbotDataset(Dataset):
         return (token_ids, np.array(mask), labels_ids)
 
 def collate_batch(batch):
-    data = [item[0] for item in batch]
-    mask = [item[1] for item in batch]
-    label = [item[2] for item in batch]
+    data = np.array([item[0] for item in batch])
+    mask = np.array([item[1] for item in batch])
+    label = np.array([item[2] for item in batch])
     return torch.LongTensor(data), torch.LongTensor(mask), torch.LongTensor(label)
 
 def download_data(url="https://raw.githubusercontent.com/songys/Chatbot_data/master/ChatbotData.csv",

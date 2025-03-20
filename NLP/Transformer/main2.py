@@ -16,12 +16,12 @@ def main():
     parser.add_argument('--d_model', type=int, default=128)
     parser.add_argument('--num_heads', type=int, default=4)
     parser.add_argument('--d_ff', type=int, default=256)
-    parser.add_argument('--vocab_size', type=int, default=100)  # 실제 vocab_size로 수정 필요
+    parser.add_argument('--vocab_size', type=int, default=100)
     parser.add_argument('--max_seq_len', type=int, default=50)
     parser.add_argument('--dropout', type=float, default=0.1)
     parser.add_argument('--batch_size', type=int, default=32)
-    parser.add_argument('--total_samples', type=int, default=1000)  # training sample 수
-    parser.add_argument('--val_samples', type=int, default=200)       # validation sample 수
+    parser.add_argument('--total_samples', type=int, default=1000)
+    parser.add_argument('--val_samples', type=int, default=200)
     parser.add_argument('--lr', type=float, default=1e-3)
     parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--save_fig', action='store_true', help='If set, saves the loss plot as a PNG file')
