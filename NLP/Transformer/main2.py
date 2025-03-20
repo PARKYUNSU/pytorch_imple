@@ -64,6 +64,9 @@ def main():
         print(f"Epoch [{epoch}/{args.epochs}] - Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
         train_losses.append(train_loss)
         val_losses.append(val_loss)
+        
+    torch.save(model.state_dict(), "final_checkpoint.pth")
+    print("Final checkpoint saved as 'final_checkpoint.pth'")
 
     plt.figure(figsize=(8, 5))
     plt.plot(range(1, args.epochs + 1), train_losses, marker='o', label='Train Loss')
