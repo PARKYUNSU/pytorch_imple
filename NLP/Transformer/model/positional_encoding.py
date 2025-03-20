@@ -29,10 +29,8 @@ class PositionalEncoding(nn.Module):
         self.register_buffer('pe', pe)
 
     def forward(self, x):
-        # 입력 시퀀스 길이에 맞게 슬라이싱
-        seq_len = x.size(1)  # 실제 seq_len
-        pe_slice = self.pe[:seq_len, :]
-        pe_slice = pe_slice.unsqueeze(0) 
-        # 최종 출력: 입력 + 위치 인코딩, 이후 드롭아웃
-        x = x + pe_slice
-        return self.dropout(x)
+        # x: [batch, seq_len, d_model]
+        seq_len = x.size(1)
+        pe_slice = self.pe[:seq_len, :]  # 예상 shape: [seq_len, d_model]
+        pe_slice = pe_slice.unsqueeze(0)  # [1, seq_len, d_model]
+        return x + pe_slice
