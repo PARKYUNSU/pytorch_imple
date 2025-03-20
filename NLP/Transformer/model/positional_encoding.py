@@ -25,12 +25,13 @@ class PositionalEncoding(nn.Module):
         # (1, max_seq_len, d_model) 형태로 reshape해서 batch 차원과 브로드캐스팅 가능하게
         pe = pe.unsqueeze(0)  # (1, max_seq_len, d_model)
 
-        # 학습되지 않는 버퍼로 등록 (매개변수 X)
+        # 학습되지 않는 버퍼로 등록
         self.register_buffer('pe', pe)
 
     def forward(self, x):
         # x: [batch, seq_len, d_model]
         seq_len = x.size(1)
-        pe_slice = self.pe[:seq_len, :]  # 예상 shape: [seq_len, d_model]
-        pe_slice = pe_slice.unsqueeze(0)  # [1, seq_len, d_model]
-        return x + pe_slice
+        # 배치 차원을 유지하면서 슬라이싱
+        pe_slice = self.pe[:, :seq_len, :]  # shape: [1, seq_len, d_model]
+        x = x + pe_slice
+        return self.dropout(x)
