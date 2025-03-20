@@ -106,20 +106,30 @@ def download_data(url="https://raw.githubusercontent.com/songys/Chatbot_data/mas
     return filename
 
 def create_mask(src, tgt, pad_idx):
-    # src: [batch, src_seq_len]
-    # tgt: [batch, tgt_seq_len]
-    src_mask = (src != pad_idx).unsqueeze(1)  # (batch, 1, src_seq_len)
-    
-    tgt_mask = (tgt != pad_idx).unsqueeze(1)  # (batch, 1, tgt_seq_len)
+    """
+    src: [batch, src_seq_len]
+    tgt: [batch, tgt_seq_len]   (보통 디코더 입력 시퀀스: max_seq_len - 1)
+    """
+    # Encoder padding mask: [batch, 1, src_seq_len]
+    src_mask = (src != pad_idx).unsqueeze(1)
+
     tgt_seq_len = tgt.size(1)
-    # 생성 마스크: decoder의 미래 정보를 보지 않도록 (upper triangular mask)
+    # 생성 마스크: decoder의 미래 토큰을 마스킹 (upper triangular mask)
     subsequent_mask = torch.triu(torch.ones((tgt_seq_len, tgt_seq_len), device=tgt.device), diagonal=1).bool()
-    
-    # tgt_mask는 현재 (batch, 1, tgt_seq_len)
-    # squeeze 후 (batch, tgt_seq_len)와 subsequent_mask (tgt_seq_len, tgt_seq_len)를 결합한 후 다시 unsqueeze
-    combined_tgt_mask = (tgt_mask.squeeze(1) & ~subsequent_mask).unsqueeze(1)  # 최종: (batch, 1, tgt_seq_len, tgt_seq_len)
-    
-    memory_mask = None
+    # 후속 마스크에 배치 차원을 추가: [1, tgt_seq_len, tgt_seq_len]
+    subsequent_mask = subsequent_mask.unsqueeze(0)
+
+    # Padding mask for decoder: [batch, 1, tgt_seq_len]
+    padding_mask = (tgt != pad_idx).unsqueeze(1)
+
+    # 결합: padding mask와 후속 마스크(~subsequent_mask)를 AND 연산 (브로드캐스팅)
+    # 결과: [batch, tgt_seq_len, tgt_seq_len]
+    combined = padding_mask & (~subsequent_mask)
+    # 최종 마스크: [batch, 1, tgt_seq_len, tgt_seq_len]
+    combined_tgt_mask = combined.unsqueeze(1)
+
+    memory_mask = None  # 필요에 따라 memory mask를 추가할 수 있음
+
     return src_mask, combined_tgt_mask, memory_mask
 
 if __name__ == "__main__":
