@@ -63,8 +63,8 @@ def main():
     val_losses = []
 
     for epoch in range(1, args.epochs + 1):
-        train_loss = train_one_epoch(model, train_dataloader, criterion, optimizer, device)
-        val_loss = validate_one_epoch(model, val_dataloader, criterion, device)
+        train_loss = train_one_epoch(model, train_dataloader, criterion, optimizer, device, args.num_heads)
+        val_loss = validate_one_epoch(model, val_dataloader, criterion, device, args.num_heads)
 
         print(f"Epoch [{epoch}/{args.epochs}] - Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
         train_losses.append(train_loss)
