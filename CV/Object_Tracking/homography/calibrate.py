@@ -23,3 +23,10 @@ def main(opts):
 
     # keypoints matching
     match = cv2.BFMatcher()
+
+    matches = match.knnMatch(vec1, vec2, k = 2) # k = 2 : 유클리드 거리가 가까운 두 점
+
+    conf = []
+    for m, n in matches:
+        if m.distance < 0.75 * n.distance:
+            conf.append(m)
