@@ -28,7 +28,7 @@ $$P_s(x)^{(i)} = \frac{exp(\frac{g_{\theta_{s}(x)^{(i)}}}{\tau_{s}})}{\sum^K_{k=
 
 $Where$
 
-$$x$$: 이미지
+$$x$$: Input Image
 
 $g_{\theta_s}(x)^{(i)}$ : Student Network의 $i$ 번째 logit 값
 
