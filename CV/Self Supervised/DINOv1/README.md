@@ -127,6 +127,6 @@ $$
 
 - Teacher Network $\theta_t$는 매 스텝에서 Student Network $\theta_s$를 모멘텀 $lambda$로 반영합니다.
 
-$
+$$
 \theta_t \;\leftarrow\; \lambda\,\theta_t + (1 - \lambda)\,\theta_s
-$
+$$
