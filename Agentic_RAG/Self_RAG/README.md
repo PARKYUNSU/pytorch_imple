@@ -88,3 +88,13 @@ Retriever $R$이 검색한 구절과 Critic model $C$가 예측한 반영 토큰
 최종적으로, 다음 Tokens을 생성하는 Generator model $M$을 학습하여, 추론 시에 별도의 Critic model 없이 $M$이 스스로 Speicial Tokens를 생성하고 활용하게 됩니다.
 
 <img src="https://github.com/user-attachments/assets/a3395073-f137-45e6-bfe4-170b24411704" width=700>
+
+## 3.2. SELF-RAG Training
+### 3.2.1. Training the critic model
+Critic model을 훈련하기 위해 데이터를 수집해야지만, 수동 주석은 비용이 많이 들기 때문에, 우리는 GPT-4와 같은 최신 LLM을 사용하여 Special Tokens(reflection tokens)에 대한 피드백을 자동으로 생성합니다. 
+
+그러나 이런 방법은 API 비용이 증가하는 단점이 있어서, GPT-4를 프롬프트하여 Special Tokens을 생성하도록 한 후, 그 지식을 내부 Critic Model $C$에 증류시키는 방식으로 지도학습 데이터를 생성합니다.
+
+
+
+
