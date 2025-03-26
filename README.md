@@ -60,7 +60,7 @@
 |---------------------------------------------|-----|
 | **[Multimodal RAG](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/Multimodal_RAG)**  | 2024 |
 | **[CRAG (Corrective Retrieval Augmented Generation)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/CRAG)**  | 2024 |
-| **[Self RAG (Self-Reflective Retrieval-Augmented Generation)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/Self_RAG)**  | 2024 |
+| **[SELF-RAG (Self-Reflective Retrieval-Augmented Generation)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/Self_RAG)**  | 2024 |
 | **[RAG (Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/Agentic_RAG/Basic_Agentic_RAG)**  | 2021 |
 
 
