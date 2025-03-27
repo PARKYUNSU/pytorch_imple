@@ -148,7 +148,7 @@ SELF-RAG는 Retrieve 토큰의 생성 확률을 정규화하여, 그 값이 지�
 세그먼트 수준의 Beem Search를 통해 매 시점 $t$마다 상위 $B$개의 후보를 선택하고, 최종 시퀀스를 반환합니다. 각 세그먼트 $y_t$의 점수는 다음과 같이 계산됩니다.
 
 $$
-f(y_t, d, \text{Critique}) = p(y_t | x, d, y_{<t})) + S(\text{Critique})
+f(y_t, d, \text{Critique}) = p(y_t | x, d, y_{t}) + S(\text{Critique})
 $$
 
   
