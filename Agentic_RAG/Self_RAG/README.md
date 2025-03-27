@@ -118,7 +118,7 @@ $$ \max_{C}\mathbb{E}_{((x, y), r)\sim\text{D}{\text{critic}}}log{pC}(r|x,y)$$
 
 각 구절에 대해, $C$는 해당 구절의 관련성(ISREL)을 평가하며, 관련성이 인정되면 그 구절이 생성 결과를 지지하는지(ISSUP)를 추가로 평가합니다.
 
-마지막 세그먼트 $y_T$에서는 $C$가 전체 유용성(ISUSE)을 평가하여, 반영 토큰이 포함된 보강된 출력과 원래 입력 쌍이 생성 데이터 집합 $D_{\text{gen}}$에 추가됩니다.
+마지막 세그먼트 $y_T$에서는 $C$가 전체 유용성(ISUSE)을 평가하여, Special Tokens이 포함된 보강된 출력과 원래 입력 쌍이 생성 데이터 집합 $D_{\text{gen}}$에 추가됩니다.
 
 #### Generator 학습
 - Special Tokens이 삽입된 보강된 코퍼스 $D_{\text{gen}}$을 사용하여,  Generator model $M$을 표준 다음 토큰 예측 목표로 학습합니다.
@@ -161,3 +161,41 @@ $$
 $s_G^t$는 해당 그룹 $G$에 대해 가장 바람직한 Special Tokens $\hat{r}$의 생성 확률을 나타내며, $w_G$는 사용자가 조정할 수 있는 하이퍼파라미터입니다. 이 평가를 바탕으로, 바람직하지 않은 후보(예: ISSUP = No support)를 필터링할 수 있습니다.
 
 최종적으로, SELF-RAG는 추가 훈련 없이도 추론 시 사용자가 원하는 방식으로 모델의 동작을 조정할 수 있습니다.
+
+
+# 4. Experiments
+## 4.1. Tasks and Datasets
+
+SELF-RAG의 성능 평가를 위해 여러 유형의 작업과 데이터셋을 사용했습니다. 먼저, **Closed-set 작업**에서는 PubHealth와 ARC-Challenge와 같이 정답 기반 평가를 수행하여 모델의 정확도를 측정했습니다. 다음으로, **Short-form 생성 작업**에서는 PopQA와 TriviaQA-unfiltered를 통해 모델이 정답을 포함하는지를 확인하였고, 마지막으로 **Long-form 생성 작업**에서는 전기(biography) 생성과 장문 QA를 활용하여 FactScore, MAUVE, 인용 정밀도 및 재현율과 같은 다양한 평가 지표로 성능을 분석했습니다. 각 데이터셋의 특징과 평가 기준에 대해 간략하게 설명함으로써, SELF-RAG의 다양한 작업에 대한 적용 가능성을 제시합니다.
+
+## 4.2. Baselines
+
+SELF-RAG의 성능을 비교하기 위해 두 가지 범주의 Baseline 모델을 선정했습니다. 하나는 **검색 없이 사용하는 모델**으로, Llama, Alpaca, ChatGPT 등이 있으며, 다른 하나는 **검색 보강 모델**으로, 표준 RAG 기반 모델, Llama2-FT, Ret-ChatGPT 등이 포함됩니다. 각 모델의 주요 특징과 적용 방식, 그리고 SELF-RAG와의 차별점을 중심으로 비교 분석합니다.
+
+## 4.3. Experimental Settings
+
+실험 설정에서는 사용한 훈련 데이터, 모델 구성 및 하이퍼파라미터, 그리고 추론 방법에 대해 상세히 기술합니다. 훈련 데이터는 다양한 지침-출력 쌍으로 구성되었으며, 데이터셋 출처와 샘플 수를 명시합니다. 모델 구성에서는 Llama2-7B/13B와 같은 기반 모델, Beem Search 및 임계값 설정 등의 세부 사항을 포함하며, 추론 시에는 검색 빈도와 토큰 디코딩 방법 등이 적용되었습니다.
+
+## 4.4. Results and Analysis
+
+SELF-RAG의 성능과 다른 Baseline 모델과의 비교 결과를 종합적으로 제시합니다. 전체 작업에 대한 성능 비교(예: Table 2)를 통해 SELF-RAG가 왜 검색 보강 ChatGPT, Llama2-chat, Alpaca 등을 능가하는지 설명합니다. 또한, ablation studies를 통해 검색 필요성, 비판 토큰 등의 개별 구성 요소가 전체 성능에 미치는 영향을 분석하고, 추론 시 사용자 맞춤형 제어 효과(예: 인용 정밀도 및 MAUVE 점수 변화)를 상세히 검토합니다. 효율성과 정확도의 trade-off, 학습 데이터 규모의 영향, 그리고 인간 평가 결과를 포함한 분석도 함께 제시됩니다.
+
+
+# 5. Result
+
+### 전체 실험 결과
+<img src="https://github.com/user-attachments/assets/54bfdd19-bb70-47f5-a558-81f8d443d3d5" width=800>
+
+| Bold : The best perform among Non-proprietary models, Gray-Bold : The best proprietary model / FS :FactScore, em :correctness, mau: MAUVE(fluency)
+
+### SELF-RAG 분석
+<img src="https://github.com/user-attachments/assets/4a29b599-ca39-45e8-a4ad-07d382d53a47" width=600>
+
+|(a) 7B 모델을 기반으로 SELF-RAG 훈련 및 추론의 핵심 구성 요소에 대한 ablation 연구 결과
+|(b) ASQA 인용 정밀도와 MAUVE(유창성)에 미치는 소프트 가중치의 효과
+|(c) PubHealth와 PopQA에서의 검색 빈도와 정규화된 정확도의 관계
+
+### Training Scale and Human Analysis
+<img src="https://github.com/user-attachments/assets/c323b90f-f30c-4003-a57c-730b118f0d09" width=600>
+(a), (b), (c) Training Scale 분석은 PopQA, PubHealth, ASQA(인용 정밀도)에 대해 훈련 데이터 규모가 미치는 효과를 각각 보여줍니다.
+(d) SELF-RAG의 출력 및 반영 토큰에 대한 인간 평가 결과를 제시합니다.
