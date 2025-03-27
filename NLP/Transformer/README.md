@@ -74,6 +74,10 @@ Trnasformer 디코더는 seq2seq 구조처럼 sos → eos 출력 까지 연산�
 
 논문에서는 이를 해결하기 위해 **Positional Encoding** 을 사용해서 입력 데이터에 순서 정보를 추가합니다.
 
+
+
+그러나, [Language Modeling with Deep Transformers-2019](https://arxiv.org/pdf/1905.04226) 논문에서는 autoregressive 언어 모델에서 causal masking이 토큰 순서를 암묵적으로 반영하기 때문에, 깊은 Transformer가 다층 self-attention과 residual 연결을 통해 내재적 위치 정보를 학습할 수 있어 별도의 positional encoding이 필요 없다고 주장합니다.
+
 <details>
 <summary>Positional Encoding 톺아보기⁉️💡</summary>
 
