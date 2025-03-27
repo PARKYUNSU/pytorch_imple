@@ -148,7 +148,7 @@ SELF-RAG는 Retrieve 토큰의 생성 확률을 정규화하여, 그 값이 지�
 세그먼트 수준의 Beem Search를 통해 매 시점 $t$마다 상위 $B$개의 후보를 선택하고, 최종 시퀀스를 반환합니다. 각 세그먼트 $y_t$의 점수는 다음과 같이 계산됩니다.
 
 $$
-f(y_t, d, \text{Critique}) = p(y_t | x, d, y_{<t}) + S(\text{Critique})
+f(y_t, d, \text{Critique}) = p(y_t | x, d, y_{\text{<}t}) + S(\text{Critique})
 $$
 
   
@@ -157,8 +157,6 @@ S(\text{Critique}) = \sum_{G \in \{\text{ISREL}, \text{ISSUP}, \text{ISUSE}\}} w
 $$
 
 
-\( s_G^t \)는 해당 그룹 \( G \)에 대해 가장 바람직한 반영 토큰 \(\hat{r}\)의 생성 확률을 나타내며, \( w_G \)는 사용자가 조정할 수 있는 하이퍼파라미터입니다.
-  - 이 평가를 바탕으로, 바람직하지 않은 후보(예: ISSUP = No support)를 필터링할 수 있습니다.
+$s_G^t$는 해당 그룹 $G$에 대해 가장 바람직한 Special Tokens $\hat{r}$의 생성 확률을 나타내며, $w_G$는 사용자가 조정할 수 있는 하이퍼파라미터입니다. 이 평가를 바탕으로, 바람직하지 않은 후보(예: ISSUP = No support)를 필터링할 수 있습니다.
 
-- **모델 맞춤화:**  
-  SELF-RAG는 추가 훈련 없이도 추론 시 사용자가 원하는 방식으로 모델의 동작(예: 증거 지원 정도에 따른 출력 제어)을 조정할 수 있습니다.
+최종적으로, SELF-RAG는 추가 훈련 없이도 추론 시 사용자가 원하는 방식으로 모델의 동작을 조정할 수 있습니다.
