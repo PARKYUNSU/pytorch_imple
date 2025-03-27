@@ -95,6 +95,14 @@ Critic model을 훈련하기 위해 데이터를 수집해야지만, 수동 주�
 
 그러나 이런 방법은 API 비용이 증가하는 단점이 있어서, GPT-4를 프롬프트하여 Special Tokens을 생성하도록 한 후, 그 지식을 내부 Critic Model $C$에 증류시키는 방식으로 지도학습 데이터를 생성합니다.
 
+각 Special Tokens 그룹(예: Retrieve, ISREL, ISSUP, ISUSE)에 대해, 원래 훈련 데이터 ${X, Y}$에서 무작위로 인스턴스 ${X_{\text{sample}}, Y_{\text{sample}}}$를 샘플링합니다.
 
+예시와 함께 “웹에서 외부 문서를 찾는 것이 도움이 되는지” 등의 지시문을 제공해 $p(r \mid I, x, y)$를 예측하고, 이를 $D_{\text{critic}}$에 저장합니다.
 
+#### Critic model 학습
+사전 학습된 LM(예: Llama 2-7B)으로 $C$를 초기화한 후, $D_{\text{critic}}$ 데이터를 이용해 다음 토큰 예측 손실을 최소화합니다
 
+    $$
+    \max_{C} \; \mathbb{E}_{((x,y), r) \sim D_{\text{critic}}} \left[\log p_C(r \mid x, y)\right]
+    $$
+  이 방법으로 $C$는 GPT-4 피드백과 90% 이상의 일치율을 달성합니다.
