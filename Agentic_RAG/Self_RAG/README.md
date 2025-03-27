@@ -191,11 +191,11 @@ SELF-RAG의 성능과 다른 Baseline 모델과의 비교 결과를 종합적으
 ### SELF-RAG 분석
 <img src="https://github.com/user-attachments/assets/4a29b599-ca39-45e8-a4ad-07d382d53a47" width=600>
 
-|(a) 7B 모델을 기반으로 SELF-RAG 훈련 및 추론의 핵심 구성 요소에 대한 ablation 연구 결과
-|(b) ASQA 인용 정밀도와 MAUVE(유창성)에 미치는 소프트 가중치의 효과
-|(c) PubHealth와 PopQA에서의 검색 빈도와 정규화된 정확도의 관계
+|(a) 7B 모델을 기반으로 SELF-RAG 훈련 및 추론의 핵심 구성 요소에 대한 ablation 연구 결과, (b) ASQA 인용 정밀도와 MAUVE(유창성)에 미치는 소프트 가중치의 효과, (c) PubHealth와 PopQA에서의 검색 빈도와 정규화된 정확도의 관계
 
 ### Training Scale and Human Analysis
 <img src="https://github.com/user-attachments/assets/c323b90f-f30c-4003-a57c-730b118f0d09" width=600>
+
 (a), (b), (c) Training Scale 분석은 PopQA, PubHealth, ASQA(인용 정밀도)에 대해 훈련 데이터 규모가 미치는 효과를 각각 보여줍니다.
+
 (d) SELF-RAG의 출력 및 반영 토큰에 대한 인간 평가 결과를 제시합니다.
