@@ -90,7 +90,8 @@ Retriever $R$이 검색한 구절과 Critic model $C$가 예측한 반영 토큰
 <img src="https://github.com/user-attachments/assets/a3395073-f137-45e6-bfe4-170b24411704" width=700>
 
 ## 3.2. SELF-RAG Training
-### 3.2.1. Training the critic model
+### 3.2.1. Training The Critic Model
+#### Critic 데이터 수집
 Critic model을 훈련하기 위해 데이터를 수집해야지만, 수동 주석은 비용이 많이 들기 때문에, 우리는 GPT-4와 같은 최신 LLM을 사용하여 Special Tokens(reflection tokens)에 대한 피드백을 자동으로 생성합니다. 
 
 그러나 이런 방법은 API 비용이 증가하는 단점이 있어서, GPT-4를 프롬프트하여 Special Tokens을 생성하도록 한 후, 그 지식을 내부 Critic Model $C$에 증류시키는 방식으로 지도학습 데이터를 생성합니다.
@@ -99,9 +100,65 @@ Critic model을 훈련하기 위해 데이터를 수집해야지만, 수동 주�
 
 예시와 함께 “웹에서 외부 문서를 찾는 것이 도움이 되는지” 등의 지시문을 제공해 $p(r \mid I, x, y)$를 예측하고, 이를 $D_{\text{critic}}$에 저장합니다.
 
-#### Critic model 학습
+#### Critic 학습
 사전 학습된 LM(예: Llama 2-7B)으로 $C$를 초기화한 후, $D_{\text{critic}}$ 데이터를 이용해 다음 토큰 예측 손실을 최소화합니다
 
-$$ \max_{c}\mathbb{E}_{((x, y), r)~\text{D}{\text{critic}}}log{pc}(r|x,y)$$
+$$ \max_{C}\mathbb{E}_{((x, y), r)\sim\text{D}{\text{critic}}}log{pC}(r|x,y)$$
 
 이 방법으로 $C$는 GPT-4 피드백과 90% 이상의 일치율을 달성합니다.
+
+### 3.2.2. Training The Generator Model
+#### Generator 데이터 수집
+입력-출력 쌍 $(x, y)$를 바탕으로, Retriever model $R$과 Critic model $C$를 활용해 원래 출력 $y$를 보강하여 SELF-RAG 추론 과정을 모방하는 지도 학습 데이터를 생성합니다.
+
+출력 $y$의 각 세그먼트 $y_t$마다 $C$를 실행하여, 추가 구절이 생성 향상에 도움이 되는지 평가합니다.
+
+만약 검색이 필요한 경우, Retrieve Special token인  **Retrieve = Yes**를 추가하고, $R$은 상위 $K$개의 구절 집합 $D$를 검색합니다.
+
+각 구절에 대해, $C$는 해당 구절의 관련성(ISREL)을 평가하며, 관련성이 인정되면 그 구절이 생성 결과를 지지하는지(ISSUP)를 추가로 평가합니다.
+
+마지막 세그먼트 $y_T$에서는 $C$가 전체 유용성(ISUSE)을 평가하여, 반영 토큰이 포함된 보강된 출력과 원래 입력 쌍이 생성 데이터 집합 $D_{\text{gen}}$에 추가됩니다.
+
+#### Generator 학습
+- Special Tokens이 삽입된 보강된 코퍼스 $D_{\text{gen}}$을 사용하여,  Generator model $M$을 표준 다음 토큰 예측 목표로 학습합니다.
+
+$$ \max_{M}\mathbb{E}_{(x, y, r)\sim\text{D}{\text{gen}}}log{pM}(y,r|x)$$
+
+Critic model $C$를 학습하는 것과 달리, $M$은 목표 출력과 함께 Special Tokens도 예측하는 법을 학습합니다.
+
+학습 과정에서는, `<p>`와 `</p>`로 둘러싸인 검색된 텍스트 조각들을 마스킹하고, 원래 어휘 $V$에 Special Tokens 집합 {Critique, Retrieve}을 추가하여 확장합니다.
+
+#### Connections to prior work on learning with critique
+최근 연구에서는 PPO를 통한 RLHF와 같이 훈련 중 추가 비판(피드백)을 도입합니다. PPO는 별도의 보상 모델에 의존하지만, SELF-RAG는 Critique를 오프라인으로 계산하여 훈련 코퍼스에 직접 삽입함으로써 훈련 비용을 크게 줄입니다.
+
+또한, SELF-RAG는 생성된 각 세그먼트 후 자체 평가를 위한 Special Tokens을 생성하여, 추론 시 소프트 리랭킹 또는 하드 제약을 적용하는 방식의 생성 제어를 가능하게 합니다.
+
+
+## 3.3. SELF-RAG Inference
+#### 제어 가능 추론 
+SELF-RAG는 생성된 출력에 대해 Special Tokens을 사용해 자체 평가를 수행하여, 추론 단계에서 모델의 동작을 제어합니다.  
+  - Tasks Demanding Factual Accuracy: 출력이 증거와 밀접하게 일치하도록 검색을 더 자주 실행합니다.  
+  - More Open-ended Tasks: 검색 빈도를 줄이고 전반적인 유창성과 유용성을 우선시합니다.
+
+#### Adaptive retrieval with threshold
+SELF-RAG는 Retrieve 토큰의 생성 확률을 정규화하여, 그 값이 지정된 임계값을 초과하면 검색을 실행합니다.
+
+#### Tree-decoding with critique tokens
+각 세그먼트 단계 $t$에서, 검색이 필요한 경우 Retriever $R$는 $K$개의 구절을 검색하고, Generator $M$은 이를 병렬로 처리하여 $K$개의 후보를 생성합니다.  
+세그먼트 수준의 Beem Search를 통해 매 시점 $t$마다 상위 $B$개의 후보를 선택하고, 최종 시퀀스를 반환합니다. 각 세그먼트 $y_t$의 점수는 다음과 같이 계산됩니다.
+
+$$
+f(y_t, d, \text{Critique}) = p(y_t \mid x, d, y_{<t}) + S(\text{Critique})
+$$
+
+  
+$$
+S(\text{Critique}) = \sum_{G \in \{\text{ISREL}, \text{ISSUP}, \text{ISUSE}\}} w_G \, s_G^t
+$$
+
+
+\( s_G^t \)는 해당 그룹 \( G \)에 대해 가장 바람직한 반영 토큰 \(\hat{r}\)의 생성 확률을 나타내며, \( w_G \)는 사용자가 조정할 수 있는 하이퍼파라미터입니다.
+  - 이 평가를 바탕으로, 바람직하지 않은 후보(예: ISSUP = No support)를 필터링할 수 있습니다.
+
+- **모델 맞춤화:**  
+  SELF-RAG는 추가 훈련 없이도 추론 시 사용자가 원하는 방식으로 모델의 동작(예: 증거 지원 정도에 따른 출력 제어)을 조정할 수 있습니다.
