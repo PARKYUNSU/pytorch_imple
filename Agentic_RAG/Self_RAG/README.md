@@ -102,11 +102,6 @@ Critic model을 훈련하기 위해 데이터를 수집해야지만, 수동 주�
 #### Critic model 학습
 사전 학습된 LM(예: Llama 2-7B)으로 $C$를 초기화한 후, $D_{\text{critic}}$ 데이터를 이용해 다음 토큰 예측 손실을 최소화합니다
 
-$$ 
-\max_{C} \; \mathbb{E}_{((x,y),r) \sim D_{\text{critic}}} \left[\log p_C\bigl(r \mid x,y\bigr)\right]
-$$
+$$ \max_{c}\mathbb{E}_{((x, y), r)~\text{D}{\text{critic}}}log{pc}(r|x,y)$$
 
-
-
-
-  이 방법으로 $C$는 GPT-4 피드백과 90% 이상의 일치율을 달성합니다.
+이 방법으로 $C$는 GPT-4 피드백과 90% 이상의 일치율을 달성합니다.
