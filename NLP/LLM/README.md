@@ -13,9 +13,11 @@ Large Language Model을 기본 Base에서 실험적인 방법으로 튜닝해서
 | Compute Capability | 6.0                       |
 
 
+Base
+
 | 항목               | 값                                                              |
 |------------------|-----------------------------------------------------------------|
-| **데이터**         | Harry Potter and the Chamber of Secrets                         |
+| **Dataset**         | Harry Potter and the Chamber of Secrets                         |
 | **문자 수**        | 488,771                                                         |
 | **토큰 수**        | 130,520                                                         |
 | **총 에포크**      | 100                                                             |
