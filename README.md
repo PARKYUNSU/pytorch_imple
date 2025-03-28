@@ -102,7 +102,7 @@ OpenAI 및 HuggingFace 등 다양한 AI 모델을 활용하는 예제를 정리�
 | **[ChatGPT API](https://github.com/PARKYUNSU/pytorch_imple/blob/main/Education/Openai_api/open_ai_01_ChatGPT_API.ipynb)**                         | ChatGPT API를 이용한 대화형 AI 구현 예제입니다.                                               |
 | **[연애상담봇](https://github.com/PARKYUNSU/pytorch_imple/blob/main/Education/Openai_api/open_ai_02_%EC%97%B0%EC%95%A0%EC%83%81%EB%8B%B4%EB%B4%87.ipynb)**                            | ChatGPT를 활용해 연애 상담 챗봇을 구현한 예제입니다.                                          |
 | **[Code Interpreter](https://github.com/PARKYUNSU/pytorch_imple/blob/main/Education/Openai_api/open_ai_02_Code_Interpreter.ipynb)**                    | ChatGPT Code Interpreter 플러그인을 활용하여 데이터 분석 작업을 수행하는 예제입니다.            |
-| **[file search](https://github.com/PARKYUNSU/pytorch_imple/blob/main/Education/Openai_api/open_ai_03_file_search.ipynb)**                         | OpenAI Embeddings를 활용하여 파일 내 검색 기능(세멘틱 검색 등)을 구현하는 예제입니다.          |
+| **[file search](https://github.com/PARKYUNSU/pytorch_imple/blob/main/Education/Openai_api/open_ai_03_file_search.ipynb)**                         | OpenAI Embeddings를 활용하여 PDF 파일 내 검색 기능(세멘틱 검색 등)을 구현하는 예제입니다.          |
 | **[Embedding](https://github.com/PARKYUNSU/pytorch_imple/blob/main/Education/Openai_api/open_ai_03_OpenAI_Embedding.ipynb)**                           | OpenAI Embeddings API를 활용한 문서 벡터화 및 유사도 측정 예제입니다.                          |
 | **[OpenAI API를 이용한 서비스개발](https://github.com/PARKYUNSU/pytorch_imple/blob/main/Education/Openai_api/open_ai_05_OpenAI_API%EB%A5%BC_%EC%9D%B4%EC%9A%A9%ED%95%9C_%EC%84%9C%EB%B9%84%EC%8A%A4%EA%B0%9C%EB%B0%9C.ipynb)**         | OpenAI API를 활용하여 간단한 웹/백엔드 서비스로 확장하는 과정을 다룬 예제입니다.               |
 
