@@ -50,7 +50,7 @@ Computer Vision, NLP/LLM, Audio 등 다양한 논문 리뷰 및 파이토치 코
 |---------------------------------------------|-----|
 | **[DeepSeek-R1](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/DeepSeek-R1)**  | 2025 |
 | **[FLAN (Finetuned Language Models)](https://github.com/PARKYUNSU/pytorch_imple/blob/main/NLP/FLAN)**   | 2022 |
-| **[LLM (Large Language Models)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LLM)**   | 2022 |
+| **[LLM (Large Language Models)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LLM)**   | - |
 | **[Transformer (Attention Is All You Need)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/Transformer)**  | 2017 |
 | **[seq2seq (Sequence to Sequence Learning)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/seq2seq)**  | 2014 |
 | **[LSTM (Long Short-Term Memory)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LSTM)**  | 1997 |
