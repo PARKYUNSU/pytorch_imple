@@ -32,7 +32,7 @@ losses = train_model(model, dataset, epochs, batch_size, lr, device)
 plot_losses(losses, filename="training_loss.png")
 
 # 이미 학습된 모델 불러오기
-model.load_state_dict(torch.load("model_100.pth", map_location=device))
+model.load_state_dict(torch.load("model_final.pth", map_location=device))
 model.eval()
 
 # 간단한 텍스트 생성 예시
