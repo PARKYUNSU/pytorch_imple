@@ -8,7 +8,7 @@ from generate import generate
 from util import plot_losses
 
 # 텍스트 파일 정제
-filename = "NLP/LLM/data/02 Harry Potter and the Chamber of Secrets.txt"
+filename = "./NLP/LLM/data/02 Harry Potter and the Chamber of Secrets.txt"
 cleaned_filename = clean_text(filename)
 
 # 정제된 텍스트 불러오기
