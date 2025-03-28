@@ -13,7 +13,6 @@ def train_model(model, dataset, epochs, batch_size, lr, device):
     for epoch in range(epochs):
         model.train()
         epoch_loss = 0
-
         pbar = tqdm(train_loader, desc=f"Epoch {epoch + 1}/{epochs}")
         for input_batch, target_batch in pbar:
             optimizer.zero_grad()
@@ -30,5 +29,6 @@ def train_model(model, dataset, epochs, batch_size, lr, device):
         avg_loss = epoch_loss / len(train_loader)
         losses.append(avg_loss)
         print(f"Epoch: {epoch + 1}, Average Loss: {avg_loss}")
-        torch.save(model.state_dict(), f"model_{str(epoch + 1).zfill(3)}.pth")
+    
+    torch.save(model.state_dict(), "model_final.pth")
     return losses
