@@ -1,11 +1,21 @@
+import argparse
 import torch
 import tiktoken
 from data_processing import clean_text
 from dataset import MyDataset
-from model import GPTModel, CONTEXT_LENGTH
 from train import train_model
 from generate import generate
 from util import plot_losses
+
+parser = argparse.ArgumentParser(description="Train and generate text with different GPT models.")
+parser.add_argument("--model", type=str, default="base", choices=["base", "pre-norm"],
+                    help="Select model type to use.")
+args = parser.parse_args()
+
+if args.model == "pre-norm":
+    from model.pre_norm import GPTModel, CONTEXT_LENGTH
+else:
+    from model.base import GPTModel, CONTEXT_LENGTH
 
 # 텍스트 파일 정제
 filename = "./NLP/LLM/data/02 Harry Potter and the Chamber of Secrets.txt"
