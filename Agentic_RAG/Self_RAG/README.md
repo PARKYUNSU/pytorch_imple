@@ -44,7 +44,7 @@ SELF-RAG는 기존 RAG의 방식과 다른 방법으로 검색합니다.
 
 
 # 3. SELF-RAG
-위에서 간단하게 기존 RAG와 다른 SELF-RAG의 검색 방법에 대해서 알아 봤습니다. LLM의 본래 지는 역량은 해치지 않으면서 검색의 효율을 높이는 SELF-RAG의 End-to-end의 학습 방법을 알아보고자 합니다.
+위에서 간단하게 기존 RAG와 다른 SELF-RAG의 검색 방법에 대해서 알아 봤습니다. LLM의 본래 지닌 역량은 해치지 않으면서 검색의 효율을 높이는 SELF-RAG의 End-to-end의 학습 방법을 알아보고자 합니다.
 
 SELF-RAG는 Special Tokens을 생성하는 법을 학습함으로써 Output에 대해 Criticize를 할 수 있도록 LM(Language Model) $M$을 학습 시킵니다.
 
