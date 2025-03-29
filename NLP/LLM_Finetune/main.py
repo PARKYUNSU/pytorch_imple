@@ -8,11 +8,14 @@ from generate import generate_responses, interactive_generation
 
 def main():
     # 디바이스 설정 및 랜덤 시드 고정
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    torch.manual_seed(123)
-    
-    # 모델과 토크나이저 로드
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     model, tokenizer = load_model_and_tokenizer(device=device)
+
+    if torch.cuda.device_count() > 1:
+        print(f"Using {torch.cuda.device_count()} GPUs")
+        model = torch.nn.DataParallel(model)
+
+    torch.manual_seed(123)
     
     # QnA 데이터 로드 및 최대 길이 계산
     qna_list = load_qna_list("./NLP/LLM_Finetune/data/qa_customdata.txt", tokenizer)
