@@ -55,8 +55,8 @@ def main():
     print("\nPost-finetuning responses:")
     generate_responses(model, tokenizer, post_questions, device)
     
-    # 인터랙티브 응답 생성 (옵션)
-    interactive_generation(model, tokenizer, device)
+    # # 인터랙티브 응답 생성 (옵션)
+    # interactive_generation(model, tokenizer, device)
 
 if __name__ == "__main__":
     main()
