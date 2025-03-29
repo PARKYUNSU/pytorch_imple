@@ -22,8 +22,11 @@ def main():
     # 파인튜닝 전 응답 확인
     pre_questions = [qna['q'] for qna in qna_list]
     pre_questions.extend([
-        "너에 대해서 설명해봐.",
-        "이처럼 인간처럼 생각하고 행동하는 AI 모델은 "
+        "박윤수의 행운의 숫자는?",
+        "박윤수가 좋아하는 디저트는 무엇인가요?",
+        "박윤수의 취미 생활은?",
+        "박윤수가 좋아하는 음악 장르는?",
+        "박윤수가 좋아하는 동물은?"
     ])
     print("\nPre-finetuning responses:")
     generate_responses(model, tokenizer, pre_questions, device)
@@ -37,17 +40,17 @@ def main():
     print("\nStarting training...")
     train_model(model, train_loader, optimizer, device, epochs=10)
     
-    # 파인튜닝 후 마지막 모델 상태 로드 (예: 에포크 9)
+    # 파인튜닝 후 마지막 모델 상태 로드
     model.load_state_dict(torch.load("final_model.pth", map_location=device))
     
     # 파인튜닝 후 응답 확인
     post_questions = [qna['q'] for qna in qna_list]
     post_questions.extend([
-        "러시아에 대해서 얘기해봐",
-        "1+1은 뭐야?",
-        "인간은 뭐라고 생각해?",
-        "수면이 부족하면 뭘 해야해?",
-        "인공지능의 장점은"
+        "박윤수의 행운의 숫자는?",
+        "박윤수가 좋아하는 디저트는 무엇인가요?",
+        "박윤수의 취미 생활은?",
+        "박윤수가 좋아하는 음악 장르는?",
+        "박윤수가 좋아하는 동물은?"
     ])
     print("\nPost-finetuning responses:")
     generate_responses(model, tokenizer, post_questions, device)
