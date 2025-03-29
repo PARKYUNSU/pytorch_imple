@@ -15,7 +15,7 @@ def main():
     model, tokenizer = load_model_and_tokenizer(device=device)
     
     # QnA 데이터 로드 및 최대 길이 계산
-    qna_list = load_qna_list("./data/qa_customdata.txt", tokenizer)
+    qna_list = load_qna_list("data/qa_customdata.txt", tokenizer)
     max_length = get_max_length(qna_list)
     print(f"Max length: {max_length}")
     
