@@ -1,6 +1,5 @@
 import torch
 from torch.utils.data import DataLoader
-from model import GPTModel, CONTEXT_LENGTH
 from tqdm import tqdm
 
 def train_model(model, dataset, epochs, batch_size, lr, device):
