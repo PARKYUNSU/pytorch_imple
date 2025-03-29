@@ -9,7 +9,7 @@ def load_qna_list(file_path, tokenizer):
     각 줄은 '질문|답변' 형식입니다.
     """
     qna_list = []
-    with open(file_path, "r", encoding="utf-8") as file:
+    with open(file_path, "r") as file:
         for line in file:
             qna = line.strip().split('|')
             if len(qna) < 2:
