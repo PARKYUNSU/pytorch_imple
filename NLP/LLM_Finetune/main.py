@@ -40,8 +40,12 @@ def main():
     print("\nStarting training...")
     train_model(model, train_loader, optimizer, device, epochs=10)
     
-    # 파인튜닝 후 마지막 모델 상태 로드 (예: 에포크 9)
-    model.load_state_dict(torch.load("final_model.pth", map_location=device))
+    # 파인튜닝 후 마지막 모델 상태 로드
+    state_dict = torch.load("final_model.pth", map_location=device)
+    if hasattr(model, "module"):
+        model.module.load_state_dict(state_dict)
+    else:
+        model.load_state_dict(state_dict)
     
     # 파인튜닝 후 응답 확인
     post_questions = [qna['q'] for qna in qna_list]
