@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 def train_model(model, train_loader, optimizer, device, epochs=10, model_save_path="final_model.pth", loss_plot_path="loss_plot.png"):
+    """
+    주어진 DataLoader를 사용해 모델을 파인튜닝합니다.
+    에포크별 평균 손실을 출력하고, 학습 완료 후 최종 모델과 손실 플롯을 저장합니다.
+    """
     tokens_seen, global_step = 0, -1
     losses = []
     for epoch in range(epochs):
@@ -26,11 +30,8 @@ def train_model(model, train_loader, optimizer, device, epochs=10, model_save_pa
         losses.append(avg_loss)
         print(f"Epoch: {epoch}, Loss: {avg_loss}")
 
-    # 학습 완료 후 최종 모델 저장 (DataParallel 사용하는 경우 처리)
-    if hasattr(model, "module"):
-        torch.save(model.module.state_dict(), model_save_path)
-    else:
-        torch.save(model.state_dict(), model_save_path)
+    # 학습 완료 후 최종 모델 저장
+    torch.save(model.state_dict(), model_save_path)
     print(f"Final model saved to {model_save_path}")
 
     # 손실 플롯 생성 및 저장
