@@ -166,11 +166,19 @@ $s_G^t$는 해당 그룹 $G$에 대해 가장 바람직한 Special Tokens $\hat{
 # 4. Experiments
 ## 4.1. Tasks and Datasets
 
-SELF-RAG의 성능 평가를 위해 여러 유형의 작업과 데이터셋을 사용했습니다. 먼저, **Closed-set 작업**에서는 PubHealth와 ARC-Challenge와 같이 정답 기반 평가를 수행하여 모델의 정확도를 측정했습니다. 다음으로, **Short-form 생성 작업**에서는 PopQA와 TriviaQA-unfiltered를 통해 모델이 정답을 포함하는지를 확인하였고, 마지막으로 **Long-form 생성 작업**에서는 전기(biography) 생성과 장문 QA를 활용하여 FactScore, MAUVE, 인용 정밀도 및 재현율과 같은 다양한 평가 지표로 성능을 분석했습니다. 각 데이터셋의 특징과 평가 기준에 대해 간략하게 설명함으로써, SELF-RAG의 다양한 작업에 대한 적용 가능성을 제시합니다.
+SELF-RAG의 성능 평가를 위해 여러 유형의 작업과 데이터셋을 사용했습니다.
+
+먼저, Closed-set 작업에서는 PubHealth와 ARC-Challenge와 같이 정답 기반 평가를 수행하여 모델의 정확도를 측정했습니다. 
+
+다음으로, Short-form 생성 작업에서는 PopQA와 TriviaQA-unfiltered를 통해 모델이 정답을 포함하는지를 확인하였고, 
+
+마지막으로 Long-form 생성 작업에서는 biography 생성과 장문 QA를 활용하여 FactScore, MAUVE, 인용 정밀도 및 재현율과 같은 다양한 평가 지표로 성능을 분석했습니다. 
+
+각 데이터셋의 특징과 평가 기준에 대해 간략하게 설명함으로써, SELF-RAG의 다양한 작업에 대한 적용 가능성을 제시합니다.
 
 ## 4.2. Baselines
 
-SELF-RAG의 성능을 비교하기 위해 두 가지 범주의 Baseline 모델을 선정했습니다. 하나는 **검색 없이 사용하는 모델**으로, Llama, Alpaca, ChatGPT 등이 있으며, 다른 하나는 **검색 보강 모델**으로, 표준 RAG 기반 모델, Llama2-FT, Ret-ChatGPT 등이 포함됩니다. 각 모델의 주요 특징과 적용 방식, 그리고 SELF-RAG와의 차별점을 중심으로 비교 분석합니다.
+SELF-RAG의 성능을 비교하기 위해 두 가지 범주의 Baseline 모델을 선정했습니다. 하나는 검색 없이 사용하는 모델으로, Llama, Alpaca, ChatGPT 등이 있으며, 다른 하나는 검색 보강 모델으로, 표준 RAG 기반 모델, Llama2-FT, Ret-ChatGPT 등이 포함됩니다. 각 모델의 주요 특징과 적용 방식, 그리고 SELF-RAG와의 차별점을 중심으로 비교 분석합니다.
 
 ## 4.3. Experimental Settings
 
