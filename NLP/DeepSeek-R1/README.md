@@ -219,7 +219,7 @@ $r_t(\theta)$가 범위 [0.8, 1.2]내에 없으므로, Clipping 후에 $r_t(\the
 연구진들은 DeepSeek-R1-Zero를 학습시키기 위해 주로 2가지 유형의 Reward로 구성된 규치 기반 Reward 시스템을 채택하였습니다.
 
 - Accuracy reward: 응답이 올바른지 평가하는 Reward Model
-- Format reward: 사고 과정을 <think>와 </think> 태그 사이에 두도록 하는 Reward Model
+- Format reward: 사고 과정을 think와 /think 태그 사이에 두도록 하는 Reward Model
 
 연구진들은 DeepSeek-R1-Zero를 개발할 때 결과나 과정의 Neural Reward Model을 적용하지 않았습니다. 왜냐하면 Neural Reward Model은 대규모 강화 학습 과정에서 Reward Hacking의 피해를 입을 수 있고, Reward Model을 재학습하는 데 추가적인 학습 리소스가 필요하며 전체 학습 파이프라인을 복잡하게 만들기 때문입니다.
 
