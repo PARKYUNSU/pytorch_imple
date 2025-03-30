@@ -3,3 +3,4 @@ Education/openai_api_____/data/embedding.csv
 Education/Openai_api/data/embedding.csv
 NLP/LLM/pth/model_final.pth
 NLP/LLM/pth/gpt3_model_final.pth
+NLP/LLM_Finetune/pth/final_mode.pth
