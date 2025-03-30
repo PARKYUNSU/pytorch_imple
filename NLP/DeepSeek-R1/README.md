@@ -130,6 +130,10 @@ TRPO는 objective term $\frac{\pi_{\theta}(a_t \mid s_t)}{\pi_{\text{old}}(a_t \
 즉, Policy의 improvement step을 최대한 크게 가져가면서, 동시에 penalty term은 old policy와 new policy의 차이가 너무 크게 변경되지 않도록 KL divergence를 통해 억제하는 것 입니다.
 
 ### 3.1.2. PPO(Proximal Policy Optimization) Process
+PPO는 Actor-Critic 방식의 한 변형입니다.
+
+- Actor(Policy Model) : 주어진 상태에서 어떤 행동을 취할지 결정
+- Critic(Advantage Model) : 각 상태에서 에이전트가 받을 것으로 기대되는 보장을 예측, Critic은 실제 보상과 예측 값의 차이를 이용해 Advantage $\hat{A}_t = r_t - V(s_t)$를 계산하는데 도움을 줍니다.
 
 $$\textbf{PPO:} \quad \max_{\theta} \ \mathbb{E}t \Bigg[
 \min\Bigg(
@@ -191,11 +195,11 @@ PPO와 달리 별도의 가치망(critic)을 두지 않고, 한 프롬프트에 
 
 $\epsilon = 0.2$라고 가정하면 Clipping의 범위는 $[0.8, 1.2]$가 됩니다. Policy 업데이트는 매 학습 스텝마다 이루어지며 $r_t(\theta)$와 $\hat(A)_t$를 사용해 업데이트 값을 계산합니다.
 
-ex) $r_t(\theta)=1.1$ $\hat(A)_t=2 가정하면,
+ex) $r_t(\theta)=1.1$ $\hat(A)_t=2$ 가정하면,
 
 $r_t(\theta)$가 범위 [0.8, 1.2]내에 있으므로, Advantage가 2인 값과 계산하여 $1.1 \times 2 = 2.2$
 
-ex) $r_t(\theta)=1.5$ $\hat(A)_t=2 가정하면,
+ex) $r_t(\theta)=1.5$ $\hat(A)_t=2$ 가정하면,
 
 $r_t(\theta)$가 범위 [0.8, 1.2]내에 없으므로, Clipping 후에 $r_t(\theta)$가 값은 1.2가 됩니다. Advantage가 2인 값과 계산하여 $1.2 \times 2 = 2.4$
 
