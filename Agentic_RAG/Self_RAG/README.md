@@ -81,10 +81,10 @@ SELF-RAG는 응답들을 최종적으로는 점수화하여 필터링하여 제�
 SELF-RAG는 기존 LM의 기본 어휘 Tokens에 Special Tokens를 추가하여 학습을 진행합니다.
 
 - Generator model $M$
-Retriever $R$이 검색한 구절과 Critic model $C$가 예측한 반영 토큰이 교차로 삽입된 정제된 코퍼스를 사용해 학습됩니다.
+Retriever $R$이 검색한 구절과 Critic model $C$가 예측한 Special Tokens이 교차로 삽입된 정제된 코퍼스를 사용해 학습됩니다.
 
 - Critic model $C$
-입력, 출력, 검색된 문서를 바탕으로 반영 토큰을 생성하도록 지도학습되며, 이를 통해 훈련 데이터에 반영 토큰이 오프라인으로 삽입됩니다.
+입력, 출력, 검색된 문서를 바탕으로 Special Tokens을 생성하도록 지도학습되며, 이를 통해 훈련 데이터에 Special Tokens이 오프라인으로 삽입됩니다.
 
 최종적으로, 다음 Tokens을 생성하는 Generator model $M$을 학습하여, 추론 시에 별도의 Critic model 없이 $M$이 스스로 Speicial Tokens를 생성하고 활용하게 됩니다.
 
@@ -198,4 +198,4 @@ SELF-RAG의 성능과 다른 Baseline 모델과의 비교 결과를 종합적으
 
 (a), (b), (c) Training Scale 분석은 PopQA, PubHealth, ASQA(인용 정밀도)에 대해 훈련 데이터 규모가 미치는 효과를 각각 보여줍니다.
 
-(d) SELF-RAG의 출력 및 반영 토큰에 대한 인간 평가 결과를 제시합니다.
+(d) SELF-RAG의 출력 및 Special Tokens에 대한 인간 평가 결과를 제시합니다.
