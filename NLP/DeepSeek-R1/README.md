@@ -12,9 +12,9 @@
 DeepSeek Research는 DeepSeek-R1 발표에 있어 3가지의 결과를 논문에서 소개합니다.
 
 ### 1.1. DeepSeek-R1-Zero
-기존의 LLM은 Supervised Learning을 통한 Fine-Tuning으로 데이터를 추가 학습하면서 추론 능력을 항상시켰습니다. 이에 반해, DeepSeek 연구진들은 DeepSeel-R1-Zero가 Supervised Learning 없이 순수 Reinforcement Learning만으로 학습되어도 강력한 추론 능력을 발휘할 수 있음을 보여줍니다.
+기존의 LLM은 Supervised Learning을 통한 Fine-Tuning으로 데이터를 추가 학습하면서 추론 능력을 항상시켰습니다. 이에 반해, DeepSeek 연구진들은 DeepSeek-R1-Zero가 Supervised Learning 없이 순수 Reinforcement Learning만으로 학습되어도 강력한 추론 능력을 발휘할 수 있음을 보여줍니다.
 
-그러나 Fine-Tunning한 데이터가 없어서 DeepSeek-R1-Zero는 2가지의 문제점이 있는데, 첫째는 Poor Readability(가독성이 떨어지는) 답변, 다른 하나는 영어와 중국어 외 언어로 질문을 할시에 CoT(Chain of Thought)가 영어로 작성되기에 답변도 영어로 나오는 Language Mixing 문제점이 있습니다.
+그러나 Fine-Tuning한 데이터가 없어서 DeepSeek-R1-Zero는 2가지의 문제점이 있는데, 첫째는 Poor Readability(가독성이 떨어지는) 답변, 다른 하나는 영어와 중국어 외 언어로 질문을 할시에 CoT(Chain of Thought)가 영어로 작성되기에 답변도 영어로 나오는 Language Mixing 문제점이 있습니다.
 
 ### 1.2. DeepSeek-R1
 그래서 Reinforcement Learning 전에 Cold-start를 데이터를 주입해서 Fine-Tuning을 진행하여, DeepSeek-R1-Zero의 문제점을 개선하고 OpenAI-o1-1217과 동등한 추론 능력을 달성하여 각광을 받았습니다.
@@ -111,11 +111,11 @@ $$\max_{\theta} \left[\frac{\pi_\theta(a_t \mid s_t)}{\pi_{\theta_{\text{old}}}(
 
 </details>
 
-## 3.1. Reinforcement Learning on the Base Model : PRO와 GRPO 비교
+## 3.1. Reinforcement Learning on the Base Model : PPO와 GRPO 비교
 
 강화학습에서는 Policy 업데이트를 위해 보통 Actor-Critic 방식, 즉 Policy 모델과 Critic 모델을 함께 사용합니다. 대표적인 알고리즘인 PPO(Proximal Policy Optimization)는 2017년에 제안되었습니다.
 
-Policy 업데이트 시 KL 발산을 이용해 신뢰 영역을 설정하여 Nwe Policy이 Old Policy와 크게 차이나지 않도록 보장하는 TRPO의 신뢰 영역 보장을 근사적으로 구현하면서 클리핑(clipping) 기법을 도입해 Policy 업데이트의 안정성을 확보합니다.
+Policy 업데이트 시 KL 발산을 이용해 신뢰 영역을 설정하여 New Policy이 Old Policy와 크게 차이나지 않도록 보장하는 TRPO의 신뢰 영역 보장을 근사적으로 구현하면서 클리핑(clipping) 기법을 도입해 Policy 업데이트의 안정성을 확보합니다.
 
 ### 3.1.1. TRPO(Trust Region Policy Optimization) Process
 
@@ -145,7 +145,7 @@ PRO에서 objective term $$\frac{\pi_\theta(a_t \mid s_t)}{\pi_{\text{old}}(a_t 
 
 $r_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{\text{old}}(a_t \mid s_t)}$은 특정 action을 취할 old policy와 new policy의 행동 확률 비율입니다.
 
-이 비율이 1 (즉, 변화 없음)에서 크게 벗어나지 않도록, Clippling은 $r_t(\theta)$ 를 $[1-\epsilon,\, 1+\epsilon]$ 범위로 제한하여, policy가 과도한 업데이되는 것을 방지합니다.
+이 비율이 1 (즉, 변화 없음)에서 크게 벗어나지 않도록, Clipping은 $r_t(\theta)$ 를 $[1-\epsilon,\, 1+\epsilon]$ 범위로 제한하여, policy가 과도한 업데이되는 것을 방지합니다.
 
 ### Algorithm 1: PPO (Actor-Critic Style)
 ```rust
@@ -170,7 +170,7 @@ end for
 - 이전 Policy $\pi{\theta}_{old}$에서 출력 그룹 ${o_1, o_2, ..., o_G}$을 샘플링합니다.
 - 즉, 이전 Policy를 기반으로 응답을 가져옴으로, 새로운 Policy $\pi_{\theta}$를 업데이트 하는 것
 
-- 새로운 Policy가 이전 Policu와 얼마나 다른지 측정합니다.
+- 새로운 Policy가 이전 Policy와 얼마나 다른지 측정합니다.
 - $r_t(θ)$의 비율이 1보다 크면, 새로운 Policy가 해당 출력에 더 높은 확률을 달성
 - $r_t(θ)$의 비율이 1보다 작으면, 새로운 Policy가 해당 출력에 더 낮은 확률을 달성
 
