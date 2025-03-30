@@ -138,7 +138,7 @@ Critic model $C$를 학습하는 것과 달리, $M$은 목표 출력과 함께 S
 ## 3.3. SELF-RAG Inference
 #### 제어 가능 추론 
 SELF-RAG는 생성된 출력에 대해 Special Tokens을 사용해 자체 평가를 수행하여, 추론 단계에서 모델의 동작을 제어합니다.  
-  - Tasks Demanding Factual Accuracy: 출력이 증거와 밀접하게 일치하도록 검색을 더 자주 실행합니다.  
+  - Tasks Demanding Factual Accuracy: 출력이 검색된 문서와 밀접하게 일치하도록 검색을 더 자주 실행합니다.  
   - More Open-ended Tasks: 검색 빈도를 줄이고 전반적인 유창성과 유용성을 우선시합니다.
 
 #### Adaptive retrieval with threshold
