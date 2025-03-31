@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/df8696f8-5e7f-489e-85e5-127e5b31ae6f)# LLM Finetuning
+# LLM Finetuning
 
 [카카오 나노 2.1b 베이스 모델](https://huggingface.co/kakaocorp/kanana-nano-2.1b-base)을 활용해서 최소한의 예제를 바탕으로 Fine-Tuning 하는 코드입니다.
 
