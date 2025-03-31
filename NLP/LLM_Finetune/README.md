@@ -24,7 +24,7 @@
 ## Dataset
 QA의 형태의 Dataset으로 "|" 이 표시를 기준으로 Question Answer 쌍의 데이터 셋
 
-[.data/qa_customdata](https://github.com/PARKYUNSU/pytorch_imple/blob/main/NLP/LLM_Finetune/data/qa_customdata.txt)
+[data/qa_customdata](https://github.com/PARKYUNSU/pytorch_imple/blob/main/NLP/LLM_Finetune/data/qa_customdata.txt)
 ```text
 박윤수의 행운의 숫자는?|박윤수는 3과 7을 좋아합니다.
 박윤수가 좋아하는 디저트는 무엇인가요?|박윤수는 티라미수와 마카롱을 좋아합니다.
