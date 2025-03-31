@@ -18,7 +18,7 @@
 | **Epochs**            | `10`                                             |
 
 ## Training Epoch Plot
-<img src="https://github.com/user-attachments/assets/25ff0a33-3a11-48ab-be7d-3aca04000d88" width=600>
+<img src="https://github.com/user-attachments/assets/25ff0a33-3a11-48ab-be7d-3aca04000d88" width=400>
 
 
 ## Dataset
