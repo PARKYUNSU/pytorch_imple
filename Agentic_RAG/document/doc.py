@@ -1,3 +1,4 @@
+from langchain_community.embeddings import GPT4AllEmbeddings
 import os
 
 class DocumentLoaderManager:
@@ -112,3 +113,14 @@ class DocumentLoaderManager:
             raise ValueError(f"지원되지 않는 텍스트 분할기 유형입니다: {splitter_type}")
         
         return splitter.create_documents([text])
+    
+    def embed_text(self, text):
+        """
+        GPT4AllEmbeddings를 사용하여 주어진 텍스트를 임베딩합니다.
+        """
+        gpt4all_embd = GPT4AllEmbeddings()
+        # 단일 텍스트에 대한 쿼리 임베딩
+        query_result = gpt4all_embd.embed_query(text)
+        # 문서 리스트 형태로 임베딩
+        doc_result = gpt4all_embd.embed_documents([text])
+        return query_result, doc_result
