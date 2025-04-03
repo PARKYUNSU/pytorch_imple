@@ -6,3 +6,5 @@ NLP/LLM/pth/gpt3_model_final.pth
 NLP/LLM_Finetune/pth/final_mode.pth
 CV/Object_Detection/SSD_MobilenetV2/project/MobileNetV2_SSD300_2.mlpackage/Data/com.apple.CoreML/model.mlmodel
 CV/Object_Detection/SSD_MobilenetV2/project/MobileNetV2_SSDLite.mlpackage/Data/com.apple.CoreML/MobileNetV2_SSDLite.mlmodel
+CV/Object_Detection/SSD_MobilenetV2/project/ObjectDetection-CoreML/ObjectDetection-CoreML/mlmodel/SSD300.mlmodel
+CV/Object_Detection/SSD_MobilenetV2/project/ObjectDetection-CoreML/ObjectDetection-CoreML/mlmodel/MobileNetV2_SSDLite.mlpackage/Data/com.apple.CoreML/MobileNetV2_SSDLite.mlmodel
