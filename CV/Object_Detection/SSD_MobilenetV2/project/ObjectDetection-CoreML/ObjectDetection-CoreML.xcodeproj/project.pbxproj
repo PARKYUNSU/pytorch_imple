@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		20ABF2352D9ECE8300D791A7 /* SSD300.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 20ABF2342D9ECE8300D791A7 /* SSD300.mlmodel */; };
+		20ABF23F2D9EDB9700D791A7 /* MobileNetV2_SSD300_2.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 20ABF23E2D9EDB9700D791A7 /* MobileNetV2_SSD300_2.mlpackage */; };
 		20EC42B92CAACFB00075093B /* MobileNetV2_SSDLite.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 20771BD32CA18A81003A300B /* MobileNetV2_SSDLite.mlpackage */; };
 		553366C62204898800A67647 /* ObjectDetection_CoreMLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553366C52204898800A67647 /* ObjectDetection_CoreMLTests.swift */; };
 		553366CF220489DD00A67647 /* UIImage+CVPixelBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553366CE220489DD00A67647 /* UIImage+CVPixelBuffer.swift */; };
@@ -36,7 +37,7 @@
 /* Begin PBXFileReference section */
 		20771BD32CA18A81003A300B /* MobileNetV2_SSDLite.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = MobileNetV2_SSDLite.mlpackage; sourceTree = "<group>"; };
 		20ABF2342D9ECE8300D791A7 /* SSD300.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = SSD300.mlmodel; sourceTree = "<group>"; };
-		20EC42B52CAAC97E0075093B /* MobileNetV2_SSD300_2.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = MobileNetV2_SSD300_2.mlpackage; sourceTree = "<group>"; };
+		20ABF23E2D9EDB9700D791A7 /* MobileNetV2_SSD300_2.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = MobileNetV2_SSD300_2.mlpackage; sourceTree = "<group>"; };
 		553366C32204898800A67647 /* ObjectDetection-CoreMLTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ObjectDetection-CoreMLTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		553366C52204898800A67647 /* ObjectDetection_CoreMLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjectDetection_CoreMLTests.swift; sourceTree = "<group>"; };
 		553366C72204898800A67647 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -121,9 +122,9 @@
 			isa = PBXGroup;
 			children = (
 				20771BD32CA18A81003A300B /* MobileNetV2_SSDLite.mlpackage */,
-				20EC42B52CAAC97E0075093B /* MobileNetV2_SSD300_2.mlpackage */,
 				C4946DC629E0D3DA00DC0E3C /* yolov8s.mlpackage */,
 				20ABF2342D9ECE8300D791A7 /* SSD300.mlmodel */,
+				20ABF23E2D9EDB9700D791A7 /* MobileNetV2_SSD300_2.mlpackage */,
 			);
 			path = mlmodel;
 			sourceTree = "<group>";
@@ -252,6 +253,7 @@
 			files = (
 				20EC42B92CAACFB00075093B /* MobileNetV2_SSDLite.mlpackage in Sources */,
 				554F149E220362AB00B828B0 /* ViewController.swift in Sources */,
+				20ABF23F2D9EDB9700D791A7 /* MobileNetV2_SSD300_2.mlpackage in Sources */,
 				558918EF22089FFE00F182BA /* Measure.swift in Sources */,
 				20ABF2352D9ECE8300D791A7 /* SSD300.mlmodel in Sources */,
 				558918ED2208218800F182BA /* DrawingBoundingBoxView.swift in Sources */,

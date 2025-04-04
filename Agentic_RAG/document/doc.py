@@ -124,3 +124,34 @@ class DocumentLoaderManager:
         # 문서 리스트 형태로 임베딩
         doc_result = gpt4all_embd.embed_documents([text])
         return query_result, doc_result
+    
+    def create_vectorstore(self, embedding_function, store_type="chroma", collection_name=None, persist_directory=None):
+        """
+        로드한 문서를 바탕으로 벡터스토어를 생성합니다.
+        
+        매개변수:
+            embedding_function: 문서 임베딩에 사용할 함수/모델
+            store_type: "chroma" 또는 "faiss" (기본값: "chroma")
+            collection_name: Chroma 벡터스토어 생성 시 컬렉션 이름
+            persist_directory: Chroma의 경우 저장할 경로 (지정하면 디스크에 저장됨)
+        
+        반환:
+            생성된 벡터스토어 인스턴스
+        """
+        docs = self.load_documents()
+        if store_type.lower() == "chroma":
+            from langchain_chroma import Chroma
+            return Chroma.from_documents(
+                documents=docs,
+                embedding=embedding_function,
+                collection_name=collection_name,
+                persist_directory=persist_directory,
+            )
+        elif store_type.lower() == "faiss":
+            from langchain.vectorstores import FAISS
+            return FAISS.from_documents(
+                documents=docs,
+                embedding=embedding_function
+            )
+        else:
+            raise ValueError(f"지원되지 않는 벡터스토어 타입입니다: {store_type}")
