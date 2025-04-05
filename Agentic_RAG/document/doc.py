@@ -155,3 +155,24 @@ class DocumentLoaderManager:
             )
         else:
             raise ValueError(f"지원되지 않는 벡터스토어 타입입니다: {store_type}")
+        
+    def create_retriever(self, embedding_function, store_type="chroma", collection_name=None, persist_directory=None, search_type="similarity", search_kwargs=None):
+        """
+        로드한 문서를 바탕으로 벡터스토어를 생성한 후, 이를 기반으로 검색기(retriever)를 생성합니다.
+        
+        매개변수:
+            embedding_function: 문서 임베딩에 사용할 함수/모델
+            store_type: "chroma" 또는 "faiss" (기본값: "chroma")
+            collection_name: 벡터스토어 생성 시 사용할 컬렉션 이름
+            persist_directory: Chroma 벡터스토어의 경우 저장할 디렉토리 (옵션)
+            search_type: 검색 유형 ("similarity", "mmr", "similarity_score_threshold" 등)
+            search_kwargs: 검색에 사용할 추가 매개변수 (예: {"k": 4})
+        
+        반환:
+            VectorStoreRetriever 객체
+        """
+        vectorstore = self.create_vectorstore(embedding_function, store_type, collection_name, persist_directory)
+        if search_kwargs is None:
+            search_kwargs = {}
+        retriever = vectorstore.as_retriever(search_type=search_type, search_kwargs=search_kwargs)
+        return retriever
