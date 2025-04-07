@@ -25,7 +25,7 @@ model = PoseEstimationWithMobileNet(
     num_channels=num_channels,
     num_heatmaps=num_heatmaps,
     num_pafs=num_pafs,
-    is_convertible_by_mo=False
+    is_convertible_by_mo=True
 )
 
 pth_path = 'human-pose-estimation-3d-0001.pth'
