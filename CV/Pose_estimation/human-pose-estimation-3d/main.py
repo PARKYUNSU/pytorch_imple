@@ -58,7 +58,7 @@ while cap.isOpened():
     # features_out: [1, 57, 32, 56]
     # heatmaps_out: [1, 19, 32, 56]
     # pafs_out: [1, 38, 32, 56]
-    features_np = features_out.squeeze(0).cpu().numpy()  # shape: (57, 32, 56)
+    features_np = features_tensor.squeeze(0).cpu().numpy()  # shape: (57, 32, 56)
     heatmaps_np = heatmaps_out.squeeze(0).cpu().numpy()    # shape: (19, 32, 56)
     # pafs_np = pafs_out.squeeze(0).cpu().numpy()
 
