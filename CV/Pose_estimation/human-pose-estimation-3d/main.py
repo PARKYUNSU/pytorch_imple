@@ -2,10 +2,12 @@ import cv2
 import torch
 import numpy as np
 import time
-from google.colab.patches import cv2_imshow
-
+import matplotlib.pyplot as plt
 
 from model import PoseEstimationWithMobileNet
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print("Using device:", device)
 
 # Input: 1 x 3 x 256 x 448, BGR
 input_height, input_width = 256, 448
@@ -28,14 +30,20 @@ model = PoseEstimationWithMobileNet(
     is_convertible_by_mo=True
 )
 
+model.to(device)
+
 pth_path = '/content/pytorch_imple/CV/Pose_estimation/human-pose-estimation-3d/human-pose-estimation-3d-0001.pth'
-state_dict = torch.load(pth_path, map_location='cpu')
+state_dict = torch.load(pth_path, map_location=device)
 model.load_state_dict(state_dict)
 model.eval()
 
 video_path = '/content/pytorch_imple/CV/Pose_estimation/human-pose-estimation-3d/input_video.mp4'
 cap = cv2.VideoCapture(video_path)
 
+output_video_filename = 'annotated_video.mp4'
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+fps = 20.0
+video_out = cv2.VideoWriter(output_video_filename, fourcc, fps, (input_width, input_height))
 while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
@@ -45,6 +53,7 @@ while cap.isOpened():
     # numpy -> torch B, C, H, W
     input_tensor = torch.from_numpy(frame_resized).permute(2, 0, 1).unsqueeze(0).float()
     input_tensor = (input_tensor - 128.0) / 255.0
+    input_tensor = input_tensor.to(device)
 
     with torch.no_grad():
         features_out, heatmaps_out, pafs_out = model(input_tensor)
@@ -83,7 +92,7 @@ while cap.isOpened():
     for kp in keypoints_2d:
         cv2.circle(annotated_frame, kp, radius=3, color=(0, 0, 255), thickness=-1)
 
-    cv2_imshow(annotated_frame)
+    video_out.write(annotated_frame)
     
     print("2D Keypoints:", keypoints_2d)
     print("3D Keypoints:", keypoints_3d)
@@ -92,3 +101,4 @@ while cap.isOpened():
     time.sleep(0.05)
 
 cap.release()
+video_out.release()
