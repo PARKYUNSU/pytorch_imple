@@ -47,9 +47,13 @@ while cap.isOpened():
     input_tensor = (input_tensor - 128.0) / 255.0
 
     with torch.no_grad():
-        # 모델의 forward는 (features, heatmaps, pafs)를 반환합니다.
         features_out, heatmaps_out, pafs_out = model(input_tensor)
-
+    
+    if isinstance(features_out, list):
+        features_tensor = features_out[0]
+    else:
+        features_tensor = features_out
+    
     # tensor shape
     # features_out: [1, 57, 32, 56]
     # heatmaps_out: [1, 19, 32, 56]
