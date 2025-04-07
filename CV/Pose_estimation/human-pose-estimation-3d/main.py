@@ -28,12 +28,12 @@ model = PoseEstimationWithMobileNet(
     is_convertible_by_mo=True
 )
 
-pth_path = 'human-pose-estimation-3d-0001.pth'
+pth_path = '/content/pytorch_imple/CV/Pose_estimation/human-pose-estimation-3d/human-pose-estimation-3d-0001.pth'
 state_dict = torch.load(pth_path, map_location='cpu')
 model.load_state_dict(state_dict)
 model.eval()
 
-video_path = 'input_video.mp4'
+video_path = '/content/pytorch_imple/CV/Pose_estimation/human-pose-estimation-3d/input_video.mp4'
 cap = cv2.VideoCapture(video_path)
 
 while cap.isOpened():
