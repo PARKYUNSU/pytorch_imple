@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Video Upload & Preview</title>
+        <style>
+            /* 드롭 존 스타일 정의 */
+            #drop_zone {
+                width: 1000px;
+                height: 450px;
+                border: 2px dashed #0087f7;
+                border-radius: 5px;
+                text-align: center;
+                line-height: 450px;
+                color: #0087f7;
+                margin: 20px auto;
+            }
+            #drop_zone.hover {
+                border-color: #00bfff;
+                color: #00bfff;
+            }
+            #download_link {
+                display: block;
+                text-align: center;
+                margin-top: 20px;
+                font-size: 16px;
+                text-decoration: none;
+                color: #0087f7;
+            }
+            /* 스타일 예시: 결과 영상 미리보기 영역 */
+            #resultVideo {
+                display: none;
+                margin: 20px auto;
+                width: 80%;
+            }
+            #downloadArea {
+                text-align: center;
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 style="text-align: center">SSD MobileNetV2</h1>
+        <!-- 드래그 앤드 드롭 영역 -->
+        <div id="drop_zone">여기에 영상을 드롭하거나 클릭하세요</div>
+        <!-- 파일 선택을 위한 숨김 파일 입력 -->
+        <input type="file" id="file_input" accept="video/mp4" style="display: none" />
+        <!-- 결과를 보여줄 영역: 미리보기 비디오와 다운로드 링크 -->
+        <div id="result">
+            <video id="resultVideo" controls>Your browser does not support the video tag.</video>
+            <div id="downloadArea"></div>
+        </div>
+
+        <script>
+            const dropZone = document.getElementById('drop_zone');
+            const fileInput = document.getElementById('file_input');
+            const resultVideo = document.getElementById('resultVideo');
+            const downloadArea = document.getElementById('downloadArea');
+
+            // 드롭 존 클릭 시 파일 선택 창을 열기 위한 이벤트
+            dropZone.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // 드래그 오버, 드래그 리브 이벤트로 기본 동작 방지 및 스타일 변경
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('hover');
+            });
+            dropZone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('hover');
+            });
+
+            // 드롭 이벤트: 파일이 드롭되면 업로드 함수 호출
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('hover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    uploadVideo(files[0]);
+                }
+            });
+
+            // 파일 입력 변경 시 업로드 함수 호출
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    uploadVideo(fileInput.files[0]);
+                }
+            });
+
+            // 영상 업로드 및 처리 함수
+            function uploadVideo(file) {
+                const formData = new FormData();
+                formData.append('video', file);
+                formData.append('min_score', '0.5');
+                formData.append('max_overlap', '0.5');
+                formData.append('top_k', '200');
+
+                fetch('/detect_video', {
+                    method: 'POST',
+                    body: formData,
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error('업로드 실패: ' + response.statusText);
+                        }
+                        return response.blob();
+                    })
+                    .then((blob) => {
+                        // Blob 데이터를 URL로 변환하여 video 태그에 연결
+                        const videoURL = URL.createObjectURL(blob);
+                        resultVideo.src = videoURL;
+                        resultVideo.style.display = 'block';
+                        resultVideo.load();
+
+                        // 다운로드 링크 생성 (비디오 아래에 표시)
+                        downloadArea.innerHTML = '';
+                        const downloadLink = document.createElement('a');
+                        downloadLink.href = videoURL;
+                        downloadLink.download = 'annotated_video.mp4';
+                        downloadLink.id = 'download_link';
+                        downloadLink.textContent = '처리된 영상 다운로드';
+                        downloadArea.appendChild(downloadLink);
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        resultVideo.style.display = 'none';
+                        downloadArea.innerHTML = '오류 발생: ' + error.message;
+                    });
+            }
+        </script>
+    </body>
+</html>

@@ -1,12 +1,21 @@
 from torchvision import transforms
 from utils import *
 from PIL import Image, ImageDraw, ImageFont
+import torch.serialization
+from model import SSD300
+# torch.serialization.add_safe_globals([set])
+# torch.serialization.add_safe_globals([SSD300])
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
+    device = torch.device("cpu")
 
 # 학습된 모델 체크포인트 로드
-checkpoint = '/Users/parkyunsu/gitfile/SSD/SSDv4_checkpoints/checkpoint_ssd300_epoch_232.pth.tar'
-checkpoint = torch.load(checkpoint, map_location=torch.device('cpu'))
+checkpoint = 'pth/checkpoint_ssd300_epoch_232.pth.tar'
+checkpoint = torch.load(checkpoint, map_location=device, weights_only=False)
 start_epoch = checkpoint['epoch'] + 1
 print('\nLoaded checkpoint from epoch %d.\n' % start_epoch)
 model = checkpoint['model']
@@ -43,15 +52,15 @@ def detect(original_image, min_score, max_overlap, top_k, suppress=None):
                                                              max_overlap=max_overlap, top_k=top_k)
 
     # 감지된 객체를 CPU로 이동
-    det_boxes = det_boxes[0].to('cpu')
+    det_boxes = det_boxes[0].to(device)
 
     # 원본 이미지 크기로 변환
     original_dims = torch.FloatTensor(
-        [original_image.width, original_image.height, original_image.width, original_image.height]).unsqueeze(0)
+        [original_image.width, original_image.height, original_image.width, original_image.height]).unsqueeze(0).to(device)
     det_boxes = det_boxes * original_dims
 
     # 클래스 라벨 디코딩
-    det_labels = [rev_label_map[l] for l in det_labels[0].to('cpu').tolist()]
+    det_labels = [rev_label_map[l] for l in det_labels[0].to(device).tolist()]
 
     # 객체가 감지되지 않으면 원본 이미지를 반환 -> 배경
     if det_labels == ['background']:
@@ -95,5 +104,3 @@ if __name__ == '__main__':
     original_image = original_image.convert('RGB')
 
     detect(original_image, min_score=0.2, max_overlap=0.5, top_k=200).show()
-
-

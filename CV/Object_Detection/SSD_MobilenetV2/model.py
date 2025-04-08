@@ -4,7 +4,12 @@ import torch.nn.functional as F
 from math import sqrt
 from itertools import product as product
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+if torch.backends.mps.is_available():
+    device = torch.device("mps")
+elif torch.cuda.is_available():
+    device = torch.device("cuda")
+else:
+    device = torch.device("cpu")
 
 class InvertedResBlock(nn.Module):
     def __init__(self, in_channels, out_channels, t, stride=1):  # t = expansion
@@ -353,12 +358,13 @@ class SSD300(nn.Module):
                 overlap = find_jaccard_overlap(class_decoded_locs, class_decoded_locs)  # (n_qualified, n_min_score)
 
                 # Non-Maximum Suppression (NMS)
-                suppress = torch.zeros((n_above_min_score), dtype=torch.uint8).to(device)  # (n_qualified)
+                suppress = torch.zeros((n_above_min_score), dtype=torch.uint8, device=device)  # 또는 dtype=torch.bool 사용 가능
 
                 for box in range(class_decoded_locs.size(0)):
                     if suppress[box] == 1:
                         continue
-                    suppress = torch.max(suppress, overlap[box] > max_overlap)
+                    # overlap[box] > max_overlap의 결과를 device로 이동
+                    suppress = torch.max(suppress, (overlap[box] > max_overlap).to(device))
                     suppress[box] = 0
 
                 # 기준을 통과한 바운딩 박스, 클레스 라벨 및 클래스 확률 저장
