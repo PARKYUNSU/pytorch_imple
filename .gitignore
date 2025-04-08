@@ -17,3 +17,4 @@ CV/Object_Detection/SSD_MobilenetV2/project/ObjectDetection-CoreML/ObjectDetecti
 CV/Object_Detection/SSD_MobilenetV2/project/ObjectDetection-CoreML/ObjectDetection-CoreML/mlmodel/MobileNetV2_SSDLite.mlpackage/Data/com.apple.CoreML/Metadata.json
 CV/Object_Detection/SSD_MobilenetV2/project/ObjectDetection-CoreML/ObjectDetection-CoreML.xcodeproj/project.xcworkspace/xcuserdata/parkyunsu.xcuserdatad/UserInterfaceState.xcuserstate
 /CV/Object_Detection/SSD_MobilenetV2/project
+CV/Object_Detection/SSD_MobilenetV2/pth/checkpoint_ssd300_epoch_232.pth.tar
