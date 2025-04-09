@@ -1,5 +1,3 @@
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FPARKYUNSU%2Fpytorch_imple&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
-
 # Paper Reviews & PyTorch Implementation
 Computer Vision, NLP/LLM, Audio 등 다양한 논문 리뷰 및 파이토치 코드 구현 저장소입니다.
 
