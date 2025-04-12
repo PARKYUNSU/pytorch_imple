@@ -1,10 +1,12 @@
 # VIP 영상
+
+## FLASK APP 배포
+
+
+
 ## SSD MobileNetV2 Model -> Iphone 14Pro
 
-MVP LIVE
-
 https://github.com/user-attachments/assets/0193f3f0-6dc0-4133-ab3c-81341b4dfa2f
-
 
 ---
 ## 논문 리뷰 영상
