@@ -10,7 +10,7 @@ https://github.com/user-attachments/assets/0193f3f0-6dc0-4133-ab3c-81341b4dfa2f
 
 ## SSD MobileNetV2 Model -> Flask App -> Node.js
 
-[![YouTube Video](https://img.youtube.com/vi/UUr9RTIfF58/0.jpg)](https://youtu.be/UUr9RTIfF58)
+https://github.com/user-attachments/assets/a468853c-311e-4ca5-abb7-2d20a8f66e54
 
 ---
 ## 논문 리뷰 영상
