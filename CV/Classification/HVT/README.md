@@ -49,7 +49,7 @@ Ex) HViT 모델은 384차원이라는 비교적 낮은 임베딩 차원에서도
 <img src="https://github.com/user-attachments/assets/498b0624-0e4c-4810-b95e-a2056cc99fbb" width=500>
   
 Hierarchical Data(계층적 데이터)란 데이터 항목 간에 Tree나 Graph 구조처럼 상∙하위 관계 혹은 전체-부분 관계가 존재하여 여러 Level로 조직될 수 있는 데이터를 말합니다.
-  즉, 단순한 Falt한 구조가 아니라 Parent-Child 또는 전체-부분 처럼 세분화된 관계가 있는 경우를 말합니다.
+  즉, 단순한 Flat한 구조가 아니라 Parent-Child 또는 전체-부분 처럼 세분화된 관계가 있는 경우를 말합니다.
 
 1. 왼쪽 그림(Image Retrieval) Whold-Fragment 관계
 
