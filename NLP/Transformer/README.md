@@ -17,7 +17,7 @@
 
 RNN, LSTM, gated recurrent 신경망은 언어 모델과 번역에 많이 사용되었습니다. 이 같은 순환 모델들은 보통 입출력 시퀀스의 각 심볼 위치에 맞춰 계산을 분할 합니다. 즉 연산 지접을 정렬하여, 이전 은닉 상태 $h_{t-1}$와 $t$ 시점 입력을 함수로 새로운 은닉 $h_{t}$를 생성합니다.
 
-<img src="https://github.com/user-attachments/assets/da2d951d-c99a-4edb-8cbb-e05bb6455041" width=500 alt="RNN 도식화">
+<img src="https://github.com/user-attachments/assets/0ba2486f-dbe2-43ed-98a9-fe8dadc41941" width=500 alt="RNN 표현방식">
 
 | RNN 재귀적 표현(좌측), 펼친 표현(우측)
 
