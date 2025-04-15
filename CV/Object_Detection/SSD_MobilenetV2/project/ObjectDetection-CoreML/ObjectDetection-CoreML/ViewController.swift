@@ -29,10 +29,10 @@ class ViewController: UIViewController {
     // yolov5n6(iOS13+), yolov5s6(iOS13+), yolov5m6(iOS13+), yolov5l6(iOS13+), yolov5x6(iOS13+)
     // yolov8n(iOS14+), yolov8s(iOS14+), yolov8m(iOS14+), yolov8l(iOS14+), yolov8x(iOS14+)
 //    lazy var objectDectectionModel = { return try? yolov8s() }()
-    let objectDectectionModel: MobileNetV2_SSDLite? = {
+    let objectDectectionModel: MobileNetSSD_NMS? = {
         do {
             let config = MLModelConfiguration()
-            return try MobileNetV2_SSDLite(configuration: config)
+            return try MobileNetSSD_NMS(configuration: config)
         } catch {
             print("모델을 로드하는 데 실패했습니다: \(error)")
             return nil
