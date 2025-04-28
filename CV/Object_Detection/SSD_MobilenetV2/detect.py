@@ -96,7 +96,6 @@ def detect(original_image, min_score, max_overlap, top_k, suppress=None):
 
     return annotated_image
 
-
 if __name__ == '__main__':
     # 입력 이미지 RGB로 변환
     img_path = '/Users/parkyunsu/Downloads/86778_35552_552.jpg'
