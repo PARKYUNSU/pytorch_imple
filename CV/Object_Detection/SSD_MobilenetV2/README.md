@@ -22,7 +22,7 @@ https://github.com/user-attachments/assets/a468853c-311e-4ca5-abb7-2d20a8f66e54
 
 ## 1. MobilnetV2 Backbone
 
-MobileNetV2 : https://github.com/PARKYUNSU/MobileNetV2
+MobileNetV2 : [https://github.com/PARKYUNSU/MobileNetV2](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Classification/MobileNetV2)
 
 기존 MobilenetV2 Model Architecture (input: 300x300)
 
