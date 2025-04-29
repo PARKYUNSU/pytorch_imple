@@ -37,7 +37,6 @@ def detect(original_image, min_score, max_overlap, top_k, suppress=None):
     param top_k : 감지된 객체 중 상위 k개만 유지
     param suppress : 이미지에서 감지되지 않기를 원하는 클래스 목록 (옵션)
     """
-
     # 이미지 변환
     image = normalize(to_tensor(resize(original_image)))
 
