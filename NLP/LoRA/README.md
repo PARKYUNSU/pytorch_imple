@@ -93,7 +93,7 @@ $$
 **목적함수:**
 
 $$
-\max_{\Phi} \sum_{(x,y) \in Z} \sum_{t=1}^{|y|} \log P_\Phi(y_t \mid x, y_{<t}) \quad \cdots (1)
+\max_\Phi \sum_{(x,y) \in Z} \sum_{t=1}^{\vert y \vert} \log P_\Phi(y_t \mid x, y_{<t}) \quad \cdots (1)
 $$
 
 **단점:** 작업마다 $\Delta\Phi$를 따로 학습, 저장해야 하고, 그 크기 $\vert\Delta\Phi\vert$가 $\vert\Phi_0\vert$와 동일함. 대형 모델일수록(ex. GPT-3 175B) 여러 작업 인스턴스를 배포하기 어렵거나 비현실적.
@@ -103,7 +103,7 @@ $$
 작업별 증가분 $\Delta\Phi$를 **작은 파라미터 집합 $\Theta$**로 부호화합니다. 즉, $\Delta\Phi = \Delta\Phi(\Theta)$이며 $\vert\Theta\vert \ll \vert\Phi_0\vert$입니다. 이제 최적화 대상은 $\Phi$가 아니라 $\Theta$입니다.
 
 $$
-\max_{\Theta} \sum_{(x,y) \in Z} \sum_{t=1}^{|y|} \log P_{\Phi_0 + \Delta\Phi(\Theta)}(y_t \mid x, y_{<t}) \quad \cdots (2)
+\max_\Theta \sum_{(x,y) \in Z} \sum_{t=1}^{\vert y \vert} \log P_{\Phi_0 + \Delta\Phi(\Theta)}(y_t \mid x, y_{<t}) \quad \cdots (2)
 $$
 
 이때 $\Delta\Phi$는 저랭크(low-rank) 표현으로 구성해 연산/메모리 효율을 얻습니다. 예를 들어 GPT-3 175B 기준으로 학습 파라미터 수 $\vert\Theta\vert$를 $\vert\Phi_0\vert$의 약 0.01%까지 줄일 수 있습니다.
