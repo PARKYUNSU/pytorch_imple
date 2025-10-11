@@ -148,8 +148,93 @@ Adapter는 파라미터 수가 작지만, 추론 속도를 느리게 만듭니�
 
 # 4. Our Method(LoRA)
 ## 4.1. Intuition
+ 
 
 
+
+
+
+---
+## LoRA의 행렬 분해 형태
+
+- 선형층 가중치 \(W_0 \in \mathbb{R}^{d_{\text{out}} \times d_{\text{in}}}\)는 **동결**.
+- 학습하는 변화량은 저랭크 행렬 곱으로 표현:
+  \[
+  \Delta W = B A,\qquad 
+  B \in \mathbb{R}^{d_{\text{out}} \times r},\ 
+  A \in \mathbb{R}^{r \times d_{\text{in}}},\ 
+  r \ll \min(d_{\text{out}}, d_{\text{in}})
+  \]
+- 최종 가중치:
+  \[
+  W = W_0 + \Delta W = W_0 + B A
+  \]
+- 출력(입력 \(x \in \mathbb{R}^{d_{\text{in}}}\)에 대해):
+  \[
+  y = W x = W_0 x + (B A) x = W_0 x + B (A x)
+  \]
+  여기서 \(A\)가 **down-projection**(차원 \(d_{\text{in}}\to r\)), \(B\)가 **up-projection**(차원 \(r\to d_{\text{out}}\)) 역할.
+
+- **랭크 성질**: \(\operatorname{rank}(\Delta W)\le r\)  
+  (저랭크 업데이트이므로, 작은 \(r\)로도 충분히 표현력을 확보하는 것이 핵심 가정)
+
+- **파라미터 수**: 기존 층은 \(d_{\text{out}} \times d_{\text{in}}\)이지만,  
+  LoRA는 \(B\)와 \(A\)만 학습 → 파라미터 수 \(d_{\text{out}}\cdot r + r\cdot d_{\text{in}} = r(d_{\text{out}}+d_{\text{in}})\).
+
+- **초기화/스케일링(자주 쓰는 형태)**:
+  \[
+  A \sim \mathcal{N}(0,\sigma^2),\quad B=0
+  \Rightarrow \Delta W(초기)=0
+  \]
+  \[
+  \Delta W = \frac{\alpha}{r}\, B A \quad (\text{스케일 조정})
+  \]
+
+## SVD와의 관계(직관)
+- 임의의 행렬 갱신 \(\Delta W\)에 대해 **최적의 랭크-\(r\) 근사**는 SVD로 얻을 수 있음:
+  \[
+  \Delta W \approx U_r \Sigma_r V_r^{\top}
+  \]
+- 이때 LoRA 형태로 **재매개변수화** 가능:
+  \[
+  B = U_r \Sigma_r,\quad A = V_r^{\top}
+  \quad\Rightarrow\quad
+  B A = U_r \Sigma_r V_r^{\top}
+  \]
+  (실제 학습에서는 SVD를 매 스텝 구하지 않고, \(A,B\)를 직접 학습)
+
+## 작은 예시(모양만)
+- 예: \(d_{\text{out}}=4,\ d_{\text{in}}=3,\ r=2\)
+  \[
+  B=
+  \begin{bmatrix}
+  \bullet & \bullet\\
+  \bullet & \bullet\\
+  \bullet & \bullet\\
+  \bullet & \bullet
+  \end{bmatrix}_{4\times 2},\quad
+  A=
+  \begin{bmatrix}
+  \bullet & \bullet & \bullet\\
+  \bullet & \bullet & \bullet
+  \end{bmatrix}_{2\times 3}
+  \]
+  \[
+  \Delta W = B A \in \mathbb{R}^{4\times 3},\quad
+  W = W_0 + \Delta W
+  \]
+
+## 합치기(추론용 병합)
+- 학습 종료 후 하나로 병합:
+  \[
+  W_{\text{merged}} = W_0 + \frac{\alpha}{r} B A
+  \]
+  ⇒ 추론 시엔 **일반 선형층과 동일 경로**로 계산(추가 지연 없음).
+
+
+
+
+---
 ## 설치 방법
 
 ```bash
