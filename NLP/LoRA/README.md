@@ -147,8 +147,145 @@ Adapter는 파라미터 수가 작지만, 추론 속도를 느리게 만듭니�
 
 
 # 4. Our Method(LoRA)
+
 ## 4.1. Intuition
- 
+
+논문의 저자들은 **"모델의 파라미터 변화량($\Delta W$)은 저랭크 구조를 가진다"**라는 가정을 합니다.
+
+즉, 대규모 언어모델의 전체 파라미터 수는 수십억 단위지만, 실제로 다운스트림 태스크에 적응할 때 필요한 정보는 훨씬 적다고 가정합니다. 전체 파라미터 공간 중 일부 저차원 공간만 수정되어도 충분하다는 뜻입니다.
+
+이를 수학적으로 표현하면 다음과 같습니다:
+
+$$
+W = W_0 + \Delta W, \quad \text{where } \Delta W = B A
+$$
+
+**표기:**
+- $W_0$: 사전학습(pre-trained)된 가중치 (고정, freeze)
+- $A \in \mathbb{R}^{r \times d}$, $B \in \mathbb{R}^{d \times r}$
+- $r \ll d$: 매우 작은 rank (예: $d=4096$, $r=4$ 또는 $8$ 정도)
+
+즉, LoRA는 $\Delta W$를 두 개의 저차원 행렬로 분해해서 학습합니다.  
+→ 이 구조가 바로 **"Low-Rank Adaptation (저랭크 적응)"**의 본질입니다.
+
+## 4.2. 수식으로 본 구조
+
+Transformer에서 Linear 연산은 다음과 같습니다:
+
+$$
+h = W x
+$$
+
+여기서 LoRA를 적용하면:
+
+$$
+h = W_0 x + \Delta W x = W_0 x + B A x
+$$
+
+**역할:**
+- $A$: **down projection** (차원 축소)
+- $B$: **up projection** (차원 확장)
+
+즉, $A \to B$는 **"저차원 병목"** 경로를 형성합니다.  
+(Autoencoder처럼 중간에 저랭크 병목을 만들어 특이성만 학습하는 구조)
+
+## 4.3. 초기화 방식
+
+학습 안정성을 위해 LoRA는 다음처럼 초기화합니다:
+
+$$
+A \sim \mathcal{N}(0, 0.01), \quad B = 0
+$$
+
+이때 학습 초기에는 $\Delta W = B A = 0$이므로, 초기 출력은 원래 모델의 출력 $W_0 x$과 완전히 동일합니다.
+
+즉, LoRA는 학습 시작 시점부터 원본 모델의 성능을 그대로 유지하며, 훈련이 진행될수록 점진적으로 태스크에 맞게 적응하게 됩니다.
+
+**✅ 장점:**
+- Catastrophic Forgetting 없음
+- Fine-tuning 초반 불안정 현상 방지
+- "안정적인 시작점" 확보
+
+## 4.4. Scaling (확대 계수 $\alpha$)
+
+LoRA는 rank가 매우 작기 때문에, $B A$가 만들어내는 $\Delta W$의 스케일(값 크기)이 너무 작을 수 있습니다.
+
+이를 보정하기 위해 scaling factor $\alpha$를 곱합니다:
+
+$$
+\Delta W = \frac{\alpha}{r} B A
+$$
+
+- $\alpha$는 보통 rank $r$보다 조금 큰 상수 (예: $\alpha=8$, $r=4$)
+- 따라서 $\frac{\alpha}{r}$는 2배 정도의 스케일 조정
+
+이 조정 덕분에 rank가 작아도 학습 효과가 충분히 반영됩니다.
+
+**💡 LoRA의 핵심 하이퍼파라미터:**
+- **rank $r$**: 얼마나 낮은 차원으로 병목을 만들지
+- **scaling $\alpha$**: 업데이트 강도 (일종의 학습율 조정 효과)
+
+## 4.5. 어디에 적용되는가 (Which Layers to Apply?)
+
+LoRA는 Transformer 내에서 모든 Linear Layer에 적용할 수 있지만, Self-Attention의 **Query ($W_q$)**와 **Value ($W_v$)** 가중치에만 적용하는 것이 가장 효율적임을 보였습니다.
+
+**이유:**
+- $W_q$, $W_v$는 attention head마다 독립적으로 존재
+- **쿼리(Query)**: 어떤 정보에 집중할지를 결정
+- **값(Value)**: 그 정보를 어떻게 활용할지를 결정
+- 즉, 모델이 "새로운 작업에 적응"할 때 주로 변하는 부분은 이 두 행렬
+
+**반면:**
+- **Key(키)**: 주로 정적 역할
+- **Output($W_o$), Feed-forward(FFN)**: 변화의 영향이 적음
+
+**실험 결과:**
+- $W_q$, $W_v$에만 LoRA를 적용해도 모든 가중치에 LoRA를 적용한 결과와 거의 동일한 성능
+- 연산량과 파라미터 수가 더욱 줄어듦
+
+## 4.6. LoRA의 계산량 분석
+
+LoRA의 추가 연산량은 극히 미미합니다.
+
+**기존 연산:**
+
+$$
+y = W_0 x
+$$
+
+**LoRA 추가:**
+
+$$
+y = W_0 x + B A x
+$$
+
+**계산 복잡도:**
+- $A x$: $(r \times d) \times (d \times 1) = O(r \cdot d)$
+- $B (A x)$: $(d \times r) \times (r \times 1) = O(d \cdot r)$
+
+총 추가 계산량은 $O(r \cdot d)$,  
+→ 전체 $O(d^2)$ 대비 무시할 정도로 작음 ($r \ll d$)
+
+**예:** GPT-3의 $d=12288$, $r=8$일 때, 추가 계산량은 **0.06% 수준**.
+
+## 4.7. 추론(Inference) 시 병합 (Merge)
+
+LoRA의 또 하나의 강점은 **추론 시 속도 저하가 전혀 없다는 것**입니다.
+
+학습이 끝난 뒤,
+
+$$
+W = W_0 + \frac{\alpha}{r} B A
+$$
+
+를 미리 계산해 병합(merge)합니다.
+
+이렇게 하면 추론 시에는 LoRA가 존재하지 않는 것처럼, 원래 모델처럼 단일 $W$로 연산됩니다.
+
+**결과:**
+- 학습 시에는 저랭크 업데이트만 수행
+- 추론 시에는 완전히 통합된 모델로 동작
+- 속도, 메모리, 정확도 모두 손실 없음
 
 
 
@@ -157,78 +294,96 @@ Adapter는 파라미터 수가 작지만, 추론 속도를 느리게 만듭니�
 ---
 ## LoRA의 행렬 분해 형태
 
-- 선형층 가중치 \(W_0 \in \mathbb{R}^{d_{\text{out}} \times d_{\text{in}}}\)는 **동결**.
+- 선형층 가중치 $W_0 \in \mathbb{R}^{d_{\text{out}} \times d_{\text{in}}}$는 **동결**.
 - 학습하는 변화량은 저랭크 행렬 곱으로 표현:
-  \[
-  \Delta W = B A,\qquad 
-  B \in \mathbb{R}^{d_{\text{out}} \times r},\ 
-  A \in \mathbb{R}^{r \times d_{\text{in}}},\ 
-  r \ll \min(d_{\text{out}}, d_{\text{in}})
-  \]
+
+$$
+\Delta W = B A,\qquad 
+B \in \mathbb{R}^{d_{\text{out}} \times r},\ 
+A \in \mathbb{R}^{r \times d_{\text{in}}},\ 
+r \ll \min(d_{\text{out}}, d_{\text{in}})
+$$
+
 - 최종 가중치:
-  \[
-  W = W_0 + \Delta W = W_0 + B A
-  \]
-- 출력(입력 \(x \in \mathbb{R}^{d_{\text{in}}}\)에 대해):
-  \[
-  y = W x = W_0 x + (B A) x = W_0 x + B (A x)
-  \]
-  여기서 \(A\)가 **down-projection**(차원 \(d_{\text{in}}\to r\)), \(B\)가 **up-projection**(차원 \(r\to d_{\text{out}}\)) 역할.
 
-- **랭크 성질**: \(\operatorname{rank}(\Delta W)\le r\)  
-  (저랭크 업데이트이므로, 작은 \(r\)로도 충분히 표현력을 확보하는 것이 핵심 가정)
+$$
+W = W_0 + \Delta W = W_0 + B A
+$$
 
-- **파라미터 수**: 기존 층은 \(d_{\text{out}} \times d_{\text{in}}\)이지만,  
-  LoRA는 \(B\)와 \(A\)만 학습 → 파라미터 수 \(d_{\text{out}}\cdot r + r\cdot d_{\text{in}} = r(d_{\text{out}}+d_{\text{in}})\).
+- 출력(입력 $x \in \mathbb{R}^{d_{\text{in}}}$에 대해):
+
+$$
+y = W x = W_0 x + (B A) x = W_0 x + B (A x)
+$$
+
+  여기서 $A$가 **down-projection**(차원 $d_{\text{in}}\to r$), $B$가 **up-projection**(차원 $r\to d_{\text{out}}$) 역할.
+
+- **랭크 성질**: $\operatorname{rank}(\Delta W)\le r$  
+  (저랭크 업데이트이므로, 작은 $r$로도 충분히 표현력을 확보하는 것이 핵심 가정)
+
+- **파라미터 수**: 기존 층은 $d_{\text{out}} \times d_{\text{in}}$이지만,  
+  LoRA는 $B$와 $A$만 학습 → 파라미터 수 $d_{\text{out}}\cdot r + r\cdot d_{\text{in}} = r(d_{\text{out}}+d_{\text{in}})$.
 
 - **초기화/스케일링(자주 쓰는 형태)**:
-  \[
-  A \sim \mathcal{N}(0,\sigma^2),\quad B=0
-  \Rightarrow \Delta W(초기)=0
-  \]
-  \[
-  \Delta W = \frac{\alpha}{r}\, B A \quad (\text{스케일 조정})
-  \]
+
+$$
+A \sim \mathcal{N}(0,\sigma^2),\quad B=0 \Rightarrow \Delta W(\text{초기})=0
+$$
+
+$$
+\Delta W = \frac{\alpha}{r}\, B A \quad (\text{스케일 조정})
+$$
 
 ## SVD와의 관계(직관)
-- 임의의 행렬 갱신 \(\Delta W\)에 대해 **최적의 랭크-\(r\) 근사**는 SVD로 얻을 수 있음:
-  \[
-  \Delta W \approx U_r \Sigma_r V_r^{\top}
-  \]
+
+- 임의의 행렬 갱신 $\Delta W$에 대해 **최적의 랭크-$r$ 근사**는 SVD로 얻을 수 있음:
+
+$$
+\Delta W \approx U_r \Sigma_r V_r^{\top}
+$$
+
 - 이때 LoRA 형태로 **재매개변수화** 가능:
-  \[
-  B = U_r \Sigma_r,\quad A = V_r^{\top}
-  \quad\Rightarrow\quad
-  B A = U_r \Sigma_r V_r^{\top}
-  \]
-  (실제 학습에서는 SVD를 매 스텝 구하지 않고, \(A,B\)를 직접 학습)
+
+$$
+B = U_r \Sigma_r,\quad A = V_r^{\top}
+\quad\Rightarrow\quad
+B A = U_r \Sigma_r V_r^{\top}
+$$
+
+  (실제 학습에서는 SVD를 매 스텝 구하지 않고, $A,B$를 직접 학습)
 
 ## 작은 예시(모양만)
-- 예: \(d_{\text{out}}=4,\ d_{\text{in}}=3,\ r=2\)
-  \[
-  B=
-  \begin{bmatrix}
-  \bullet & \bullet\\
-  \bullet & \bullet\\
-  \bullet & \bullet\\
-  \bullet & \bullet
-  \end{bmatrix}_{4\times 2},\quad
-  A=
-  \begin{bmatrix}
-  \bullet & \bullet & \bullet\\
-  \bullet & \bullet & \bullet
-  \end{bmatrix}_{2\times 3}
-  \]
-  \[
-  \Delta W = B A \in \mathbb{R}^{4\times 3},\quad
-  W = W_0 + \Delta W
-  \]
+
+- 예: $d_{\text{out}}=4,\ d_{\text{in}}=3,\ r=2$
+
+$$
+B=
+\begin{bmatrix}
+\bullet & \bullet \\
+\bullet & \bullet \\
+\bullet & \bullet \\
+\bullet & \bullet
+\end{bmatrix}_{4\times 2},\quad
+A=
+\begin{bmatrix}
+\bullet & \bullet & \bullet \\
+\bullet & \bullet & \bullet
+\end{bmatrix}_{2\times 3}
+$$
+
+$$
+\Delta W = B A \in \mathbb{R}^{4\times 3},\quad
+W = W_0 + \Delta W
+$$
 
 ## 합치기(추론용 병합)
+
 - 학습 종료 후 하나로 병합:
-  \[
-  W_{\text{merged}} = W_0 + \frac{\alpha}{r} B A
-  \]
+
+$$
+W_{\text{merged}} = W_0 + \frac{\alpha}{r} B A
+$$
+
   ⇒ 추론 시엔 **일반 선형층과 동일 경로**로 계산(추가 지연 없음).
 
 
