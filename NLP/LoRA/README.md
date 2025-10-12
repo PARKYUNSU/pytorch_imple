@@ -316,13 +316,13 @@ $$
 y = W x = W_0 x + (B A) x = W_0 x + B (A x)
 $$
 
-  여기서 $A$가 **down-projection**(차원 $d_{\text{in}}\to r$), $B$가 **up-projection**(차원 $r\to d_{\text{out}}$) 역할.
+  여기서 $A$가 **down-projection** (차원 $d_{\text{in}} \to r$), $B$가 **up-projection** (차원 $r \to d_{\text{out}}$) 역할.
 
-- **랭크 성질**: $\operatorname{rank}(\Delta W)\le r$  
+- **랭크 성질**: $\text{rank}(\Delta W) \le r$  
   (저랭크 업데이트이므로, 작은 $r$로도 충분히 표현력을 확보하는 것이 핵심 가정)
 
-- **파라미터 수**: 기존 층은 $d_{\text{out}} \times d_{\text{in}}$이지만,  
-  LoRA는 $B$와 $A$만 학습 → 파라미터 수 $d_{\text{out}}\cdot r + r\cdot d_{\text{in}} = r(d_{\text{out}}+d_{\text{in}})$.
+- **파라미터 수**: 기존 층은 $d_{\text{out}} \times d_{\text{in}}$이지만, LoRA는 $B$와 $A$만 학습  
+  → 파라미터 수: $d_{\text{out}} \cdot r + r \cdot d_{\text{in}} = r(d_{\text{out}} + d_{\text{in}})$
 
 - **초기화/스케일링(자주 쓰는 형태)**:
 
