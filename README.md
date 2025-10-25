@@ -43,7 +43,6 @@ Computer Vision, NLP/LLM, Audio 등 다양한 논문 리뷰 및 파이토치 코
 | 논문 제목                                    | 연도 |
 |---------------------------------------------|-----|
 | [**DINOV1 (Emerging Properties in Self-Supervised Vision Transformers)**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Self%20Supervised/DINOv1)                            | 2021 |
-| [**LoRA (Low-Rank Adaptation)** - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Self%20Supervised/LoRA)                            | 2021 |
 | **[MaskSplit (Self-supervised Few-shot Semantic Segmentation) - 작성중](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Self%20Supervised/MaskSplit)**  | 2021 |
 | **[SimSiam (Simple Siamese)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/CV/Self%20Supervised/SimSiam)**  | 2021 |
 
@@ -53,6 +52,7 @@ Computer Vision, NLP/LLM, Audio 등 다양한 논문 리뷰 및 파이토치 코
 |---------------------------------------------|-----|
 | **[DeepSeek-R1](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/DeepSeek-R1)**  | 2025 |
 | **[FLAN (Finetuned Language Models)](https://github.com/PARKYUNSU/pytorch_imple/blob/main/NLP/FLAN)**   | 2022 |
+| [**LoRA (Low-Rank Adaptation)**](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LoRA)                            | 2021 |
 | **[LLM FineTuening](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LLM_Finetune)**   | - |
 | **[LLM (Large Language Models)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/LLM)**   | - |
 | **[Transformer (Attention Is All You Need)](https://github.com/PARKYUNSU/pytorch_imple/tree/main/NLP/Transformer)**  | 2017 |
